@@ -885,7 +885,7 @@ var _typeof3 = _interopRequireDefault(_typeof2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var assert = __webpack_require__("N+Om");
-var ecc = __webpack_require__("Dfrr");
+var ecc = __webpack_require__("u+wb");
 var Fcbuffer = __webpack_require__("3FNs");
 var createHash = __webpack_require__("BVsN");
 
@@ -899,71 +899,42 @@ module.exports = writeApiGen;
 var sign = ecc.sign;
 
 
-function writeApiGen(Network, network, structs, config, abis) {
+function writeApiGen(Network, network, structs, config, schemaDef) {
   if (typeof config.chainId !== 'string') {
     throw new TypeError('config.chainId is required');
   }
+
   var writeApi = WriteApi(Network, network, config, structs.transaction);
   var reserveFunctions = new Set(['transaction', 'contract']);
-
   var merge = {};
-  // sends transactions, can act as an action collecting wrapper
+
+  // sends transactions, also a action collecting wrapper functions
   merge.transaction = writeApi.genTransaction(structs, merge);
 
   // Immediate send operations automatically calls merge.transaction
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
-
-  try {
-    for (var _iterator = abis[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var abi = _step.value;
-
-      for (var type in abi.schema) {
-        var typeStruct = abi.schema[type];
-        if (typeof typeStruct === 'string') {
-          // skip types like; name, account_name, etc..
-          continue;
-        }
-
-        assert.equal(typeof typeStruct === 'undefined' ? 'undefined' : (0, _typeof3.default)(typeStruct), 'object', 'abi.schema[type = ' + type + ']');
-
-        var action = typeStruct.action;
-
-        if (action === undefined) {
-          // ABI private struct
-          continue;
-        }
-
-        if (reserveFunctions.has(action.name)) {
-          throw new TypeError('Conflicting Api function: ' + type);
-        }
-
-        var definition = schemaFields(abi.schema, type);
-        merge[action.name] = writeApi.genMethod(type, definition, merge.transaction, action.account, action.name);
-      }
+  for (var type in schemaDef) {
+    var schema = schemaDef[type];
+    if (schema.action == null) {
+      continue;
+    }
+    var actionName = schema.action.name;
+    if (reserveFunctions.has(actionName)) {
+      throw new TypeError('Conflicting Api function: ' + type);
     }
 
-    /**
-      Immedate send contract actions.
-       @example eos.contract('mycontract', [options], [callback])
-      @example eos.contract('mycontract').then(mycontract => mycontract.myaction(...))
-    */
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
+    var struct = structs[type];
+    if (struct == null) {
+      continue;
     }
+    var definition = schemaFields(schemaDef, type);
+    merge[actionName] = writeApi.genMethod(type, definition, merge.transaction, schema.action.account);
   }
 
+  /**
+    Immedate send contract actions.
+     @example eos.contract('mycontract', [options], [callback])
+    @example eos.contract('mycontract').then(mycontract => mycontract.myaction(...))
+  */
   merge.contract = function () {
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
@@ -1004,7 +975,7 @@ function WriteApi(Network, network, config, Transaction) {
         args[_key2] = arguments[_key2];
       }
 
-      var contracts, options, callback, isContractArray, accounts, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, action, abiPromises, cachedCode, arg, contractPromises, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, account;
+      var contracts, options, callback, isContractArray, accounts, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, action, abiPromises, cachedCode, arg, contractPromises, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, account;
 
       return _regenerator2.default.async(function _callee$(_context) {
         while (1) {
@@ -1050,14 +1021,12 @@ function WriteApi(Network, network, config, Transaction) {
               // full transaction, lookup ABIs used by each action
               accounts = new Set(); // make a unique list
 
-              // TODO: Add args[0].context_free_actions to accounts too?
-
-              _iteratorNormalCompletion2 = true;
-              _didIteratorError2 = false;
-              _iteratorError2 = undefined;
+              _iteratorNormalCompletion = true;
+              _didIteratorError = false;
+              _iteratorError = undefined;
               _context.prev = 18;
-              for (_iterator2 = args[0].actions[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                action = _step2.value;
+              for (_iterator = args[0].actions[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                action = _step.value;
 
                 accounts.add(action.account);
               }
@@ -1068,26 +1037,26 @@ function WriteApi(Network, network, config, Transaction) {
             case 22:
               _context.prev = 22;
               _context.t0 = _context['catch'](18);
-              _didIteratorError2 = true;
-              _iteratorError2 = _context.t0;
+              _didIteratorError = true;
+              _iteratorError = _context.t0;
 
             case 26:
               _context.prev = 26;
               _context.prev = 27;
 
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
+              if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
               }
 
             case 29:
               _context.prev = 29;
 
-              if (!_didIteratorError2) {
+              if (!_didIteratorError) {
                 _context.next = 32;
                 break;
               }
 
-              throw _iteratorError2;
+              throw _iteratorError;
 
             case 32:
               return _context.finish(29);
@@ -1097,7 +1066,6 @@ function WriteApi(Network, network, config, Transaction) {
 
             case 34:
               abiPromises = [];
-
               // Eos contract operations are cached (efficient and offline transactions)
 
               cachedCode = new Set(['eosio', 'eosio.token', 'eosio.null']);
@@ -1132,13 +1100,13 @@ function WriteApi(Network, network, config, Transaction) {
               assert.equal('function', typeof arg === 'undefined' ? 'undefined' : (0, _typeof3.default)(arg), 'provide function callback following contracts array parameter');
 
               contractPromises = [];
-              _iteratorNormalCompletion3 = true;
-              _didIteratorError3 = false;
-              _iteratorError3 = undefined;
+              _iteratorNormalCompletion2 = true;
+              _didIteratorError2 = false;
+              _iteratorError2 = undefined;
               _context.prev = 50;
 
-              for (_iterator3 = contracts[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                account = _step3.value;
+              for (_iterator2 = contracts[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                account = _step2.value;
 
                 // setup wrapper functions to collect contract api calls
                 contractPromises.push(genContractActions(account, merge.transaction));
@@ -1150,26 +1118,26 @@ function WriteApi(Network, network, config, Transaction) {
             case 54:
               _context.prev = 54;
               _context.t1 = _context['catch'](50);
-              _didIteratorError3 = true;
-              _iteratorError3 = _context.t1;
+              _didIteratorError2 = true;
+              _iteratorError2 = _context.t1;
 
             case 58:
               _context.prev = 58;
               _context.prev = 59;
 
-              if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                _iterator3.return();
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
               }
 
             case 61:
               _context.prev = 61;
 
-              if (!_didIteratorError3) {
+              if (!_didIteratorError2) {
                 _context.next = 64;
                 break;
               }
 
-              throw _iteratorError3;
+              throw _iteratorError2;
 
             case 64:
               return _context.finish(61);
@@ -1249,7 +1217,7 @@ function WriteApi(Network, network, config, Transaction) {
       }
 
       if (args.length === 0) {
-        console.log(usage({ name: name, type: type }, definition, Network, account, config));
+        console.log(usage(type, definition, Network, account, config));
         return;
       }
 
@@ -1280,51 +1248,27 @@ function WriteApi(Network, network, config, Transaction) {
         throw new Error('Callback during a transaction are not supported');
       }
 
+      var addDefaultAuths = options.authorization == null;
+
       var authorization = [];
-      var providedAuth = options.authorization ? options.authorization : config.authorization;
-      var addDefaultAuths = providedAuth == null;
-
-      // Often if the first field in an action is an account name it is
-      // also the required authorization.
-      function firstAccount() {
-        var fieldKeys = Object.keys(definition);
-        var f1 = fieldKeys[0];
-
-        if (definition[f1] === 'account_name') {
-          return params[f1];
+      if (options.authorization) {
+        if (typeof options.authorization === 'string') {
+          options.authorization = [options.authorization];
         }
-      }
+        options.authorization.forEach(function (auth) {
+          if (typeof auth === 'string') {
+            var _auth$split = auth.split('@'),
+                _auth$split2 = (0, _slicedToArray3.default)(_auth$split, 2),
+                actor = _auth$split2[0],
+                _auth$split2$ = _auth$split2[1],
+                permission = _auth$split2$ === undefined ? 'active' : _auth$split2$;
 
-      if (providedAuth) {
-        var authArray = void 0;
-        if (typeof providedAuth === 'string') {
-          authArray = [providedAuth];
-        } else if (Array.isArray(providedAuth)) {
-          authArray = providedAuth;
-        }
-
-        if (authArray) {
-          authArray.forEach(function (auth) {
-            if (typeof auth === 'string') {
-              var _auth$split = auth.split('@'),
-                  _auth$split2 = (0, _slicedToArray3.default)(_auth$split, 2),
-                  actor = _auth$split2[0],
-                  _auth$split2$ = _auth$split2[1],
-                  permission = _auth$split2$ === undefined ? 'active' : _auth$split2$;
-
-              if (actor === '') {
-                actor = firstAccount();
-              }
-              if (actor) {
-                authorization.push({ actor: actor, permission: permission });
-              }
-            } else if ((typeof auth === 'undefined' ? 'undefined' : (0, _typeof3.default)(auth)) === 'object') {
-              authorization.push(auth);
-            }
-          });
-        }
-
-        assert.equal(authorization.length, authArray.length, 'invalid authorization in: ' + JSON.stringify(providedAuth));
+            authorization.push({ actor: actor, permission: permission });
+          } else if ((typeof auth === 'undefined' ? 'undefined' : (0, _typeof3.default)(auth)) === 'object') {
+            authorization.push(auth);
+          }
+        });
+        assert.equal(authorization.length, options.authorization.length, 'invalid authorization in: ' + JSON.stringify(options.authorization));
       }
 
       var tr = {
@@ -1337,11 +1281,13 @@ function WriteApi(Network, network, config, Transaction) {
       };
 
       if (addDefaultAuths) {
-        var actor = firstAccount();
-        if (actor) {
+        var fieldKeys = Object.keys(definition);
+        var f1 = fieldKeys[0];
+
+        if (definition[f1] === 'account_name') {
           // Default authorization (since user did not provide one)
           tr.actions[0].authorization.push({
-            actor: actor,
+            actor: params[f1],
             permission: 'active'
           });
         }
@@ -1435,13 +1381,13 @@ function WriteApi(Network, network, config, Transaction) {
     return Promise.resolve(promiseCollector).then(function () {
       return Promise.all(messageList).then(function (resolvedMessageList) {
         var actions = [];
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator4 = resolvedMessageList[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var m = _step4.value;
+          for (var _iterator3 = resolvedMessageList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var m = _step3.value;
 
             var _m$actions = (0, _slicedToArray3.default)(m.actions, 1),
                 action = _m$actions[0];
@@ -1449,16 +1395,16 @@ function WriteApi(Network, network, config, Transaction) {
             actions.push(action);
           }
         } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-              _iterator4.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+              _iterator3.return();
             }
           } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
+            if (_didIteratorError3) {
+              throw _iteratorError3;
             }
           }
         }
@@ -1471,302 +1417,209 @@ function WriteApi(Network, network, config, Transaction) {
   }
 
   function transaction(arg, options, callback) {
-    var defaultExpiration, optionDefault, returnPromise, superCallback, rawTx, _arr, _i, txField, txObject, buf, tr, transactionId, sigs, chainIdBuf, packedContextFreeData, signBuf;
+    var defaultExpiration = config.expireInSeconds ? config.expireInSeconds : 60;
+    var optionDefault = { expireInSeconds: defaultExpiration, broadcast: true, sign: true };
+    options = Object.assign({} /*clone*/, optionDefault, options);
 
-    return _regenerator2.default.async(function transaction$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            defaultExpiration = config.expireInSeconds ? config.expireInSeconds : 60;
-            optionDefault = { expireInSeconds: defaultExpiration, broadcast: true, sign: true };
+    var returnPromise = void 0;
+    if (typeof callback !== 'function') {
+      returnPromise = new Promise(function (resolve, reject) {
+        callback = function callback(err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        };
+      });
+    }
 
-            options = Object.assign({} /*clone*/, optionDefault, options);
+    if ((typeof arg === 'undefined' ? 'undefined' : (0, _typeof3.default)(arg)) !== 'object') {
+      throw new TypeError('First transaction argument should be an object or function');
+    }
 
-            returnPromise = void 0;
+    if (!Array.isArray(arg.actions)) {
+      throw new TypeError('Expecting actions array');
+    }
 
-            if (typeof callback !== 'function') {
-              returnPromise = new Promise(function (resolve, reject) {
-                callback = function callback(err, result) {
-                  if (err) {
-                    reject(err);
-                  } else {
-                    resolve(result);
+    if (config.logger.log || config.logger.error) {
+      // wrap the callback with the logger
+      var superCallback = callback;
+      callback = function callback(error, tr) {
+        if (error && config.logger.error) {
+          config.logger.error(error);
+        }
+        if (config.logger.log) {
+          config.logger.log(JSON.stringify(tr));
+        }
+        superCallback(error, tr);
+      };
+    }
+
+    arg.actions.forEach(function (action) {
+      if (!Array.isArray(action.authorization)) {
+        throw new TypeError('Expecting action.authorization array', action);
+      }
+    });
+
+    if (options.sign && typeof config.signProvider !== 'function') {
+      throw new TypeError('Expecting config.signProvider function (disable using {sign: false})');
+    }
+
+    var argHeaders = null;
+    if ( // minimum required headers
+    arg.expiration != null && arg.ref_block_num != null && arg.ref_block_prefix != null) {
+      var expiration = arg.expiration,
+          ref_block_num = arg.ref_block_num,
+          ref_block_prefix = arg.ref_block_prefix;
+
+      argHeaders = {
+        expiration: expiration,
+        ref_block_num: ref_block_num,
+        ref_block_prefix: ref_block_prefix
+      };
+    }
+
+    var headers = void 0;
+    if (argHeaders) {
+      headers = function headers(expireInSeconds, callback) {
+        return callback(null, argHeaders);
+      };
+    } else if (config.transactionHeaders) {
+      if ((0, _typeof3.default)(config.transactionHeaders) === 'object') {
+        headers = function headers(exp, callback) {
+          return callback(null, config.transactionHeaders);
+        };
+      } else {
+        assert.equal((0, _typeof3.default)(config.transactionHeaders), 'function', 'config.transactionHeaders');
+        headers = config.transactionHeaders;
+      }
+    } else {
+      assert(network, 'Network is required, provide httpEndpoint or own transaction headers');
+      headers = network.createTransaction;
+    }
+
+    headers(options.expireInSeconds, checkError(callback, config.logger, function _callee2(rawTx) {
+      var defaultHeaders, txObject, buf, tr, transactionId, sigs, chainIdBuf, packedContextFreeData, signBuf;
+      return _regenerator2.default.async(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              // console.log('rawTx', rawTx)
+              assert.equal(typeof rawTx === 'undefined' ? 'undefined' : (0, _typeof3.default)(rawTx), 'object', 'expecting transaction header object');
+              assert.equal((0, _typeof3.default)(rawTx.expiration), 'string', 'expecting expiration: iso date time string');
+              assert.equal((0, _typeof3.default)(rawTx.ref_block_num), 'number', 'expecting ref_block_num number');
+              assert.equal((0, _typeof3.default)(rawTx.ref_block_prefix), 'number', 'expecting ref_block_prefix number');
+
+              defaultHeaders = {
+                max_net_usage_words: 0,
+                max_cpu_usage_ms: 0,
+                delay_sec: 0
+              };
+
+
+              rawTx = Object.assign({}, defaultHeaders, rawTx);
+              rawTx.context_free_actions = arg.context_free_actions;
+              rawTx.actions = arg.actions;
+              rawTx.transaction_extensions = arg.transaction_extensions;
+
+              // Resolve shorthand
+              txObject = Transaction.fromObject(rawTx);
+              buf = Fcbuffer.toBuffer(Transaction, txObject);
+              tr = Transaction.toObject(txObject);
+              transactionId = createHash('sha256').update(buf).digest().toString('hex');
+              sigs = [];
+
+              if (options.sign) {
+                chainIdBuf = new Buffer(config.chainId, 'hex');
+                packedContextFreeData = new Buffer(new Uint8Array(32)); // TODO
+
+                signBuf = Buffer.concat([chainIdBuf, buf, packedContextFreeData]);
+
+                sigs = config.signProvider({ transaction: tr, buf: signBuf, sign: sign });
+                if (!Array.isArray(sigs)) {
+                  sigs = [sigs];
+                }
+              }
+
+              // sigs can be strings or Promises
+              Promise.all(sigs).then(function (sigs) {
+                sigs = [].concat.apply([], sigs); // flatten arrays in array
+
+                for (var i = 0; i < sigs.length; i++) {
+                  var sig = sigs[i];
+                  // normalize (hex to base58 format for example)
+                  if (typeof sig === 'string' && sig.length === 130) {
+                    sigs[i] = ecc.Signature.from(sig).toString();
                   }
+                }
+
+                var packedTr = {
+                  compression: 'none',
+                  transaction: tr,
+                  signatures: sigs
                 };
-              });
-            }
 
-            if (!((typeof arg === 'undefined' ? 'undefined' : (0, _typeof3.default)(arg)) !== 'object')) {
-              _context4.next = 7;
-              break;
-            }
-
-            throw new TypeError('First transaction argument should be an object or function');
-
-          case 7:
-            if (Array.isArray(arg.actions)) {
-              _context4.next = 9;
-              break;
-            }
-
-            throw new TypeError('Expecting actions array');
-
-          case 9:
-
-            if (config.logger.log || config.logger.error) {
-              // wrap the callback with the logger
-              superCallback = callback;
-
-              callback = function callback(error, tr) {
-                if (error && config.logger.error) {
-                  config.logger.error(error);
-                }
-                if (config.logger.log) {
-                  config.logger.log(JSON.stringify(tr));
-                }
-                superCallback(error, tr);
-              };
-            }
-
-            arg.actions.forEach(function (action) {
-              if (!Array.isArray(action.authorization)) {
-                throw new TypeError('Expecting action.authorization array', action);
-              }
-            });
-
-            if (!(options.sign && typeof config.signProvider !== 'function')) {
-              _context4.next = 13;
-              break;
-            }
-
-            throw new TypeError('Expecting config.signProvider function (disable using {sign: false})');
-
-          case 13:
-            rawTx = {
-              max_net_usage_words: 0,
-              max_cpu_usage_ms: 0,
-              delay_sec: 0,
-              context_free_actions: [],
-              actions: [],
-              signatures: [],
-              transaction_extensions: []
-
-              // global transaction headers
-            };
-
-            if (!config.transactionHeaders) {
-              _context4.next = 25;
-              break;
-            }
-
-            if (!((0, _typeof3.default)(config.transactionHeaders) === 'object')) {
-              _context4.next = 19;
-              break;
-            }
-
-            Object.assign(rawTx, config.transactionHeaders);
-            _context4.next = 25;
-            break;
-
-          case 19:
-            if (!(typeof config.transactionHeaders === 'function')) {
-              _context4.next = 24;
-              break;
-            }
-
-            _context4.next = 22;
-            return _regenerator2.default.awrap(config.transactionHeaders(options.expireInSeconds, checkError(callback, config.logger, function _callee2(headers) {
-              return _regenerator2.default.async(function _callee2$(_context2) {
-                while (1) {
-                  switch (_context2.prev = _context2.next) {
-                    case 0:
-                      assert.equal(typeof headers === 'undefined' ? 'undefined' : (0, _typeof3.default)(headers), 'object', 'expecting transaction header object');
-                      Object.assign(rawTx, headers);
-
-                    case 2:
-                    case 'end':
-                      return _context2.stop();
+                var mock = config.mockTransactions ? config.mockTransactions() : null;
+                if (mock != null) {
+                  assert(/pass|fail/.test(mock), 'mockTransactions should return a string: pass or fail');
+                  if (mock === 'pass') {
+                    callback(null, {
+                      transaction_id: transactionId,
+                      mockTransaction: true,
+                      broadcast: false,
+                      transaction: packedTr
+                    });
                   }
-                }
-              }, null, this);
-            })));
+                  if (mock === 'fail') {
+                    var error = '[push_transaction mock error] \'fake error\', digest \'' + buf.toString('hex') + '\'';
 
-          case 22:
-            _context4.next = 25;
-            break;
-
-          case 24:
-            assert(false, 'config.transactionHeaders should be an object or function');
-
-          case 25:
-
-            // per transaction headers
-            _arr = ['expiration', 'ref_block_num', 'ref_block_prefix', 'delay_sec', 'max_net_usage_words', 'max_cpu_usage_ms'];
-            for (_i = 0; _i < _arr.length; _i++) {
-              txField = _arr[_i];
-
-              if (arg[txField] !== undefined) {
-                // eos.transaction('eosio', eosio => { eosio.myaction(..) }, {delay_sec: 369})
-                // eos.transaction({delay_sec: 369, actions: [...]})
-                rawTx[txField] = arg[txField];
-              } else if (options[txField] !== undefined) {
-                // eos.transaction(tr => {tr.transfer(...)}, {delay_sec: 369})
-                rawTx[txField] = options[txField];
-              }
-            }
-
-            // eosjs calcualted headers
-
-            if (!( // minimum required headers
-            rawTx.expiration === undefined || rawTx.ref_block_num === undefined || rawTx.ref_block_prefix === undefined)) {
-              _context4.next = 31;
-              break;
-            }
-
-            assert(network, 'Network is required, provide httpEndpoint or own transaction headers');
-            _context4.next = 31;
-            return _regenerator2.default.awrap(new Promise(function (resolve) {
-              network.createTransaction(options.expireInSeconds, checkError(callback, config.logger, function _callee3(headers) {
-                var _arr2, _i2, txField;
-
-                return _regenerator2.default.async(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                        _arr2 = ['expiration', 'ref_block_num', 'ref_block_prefix'];
-
-                        for (_i2 = 0; _i2 < _arr2.length; _i2++) {
-                          txField = _arr2[_i2];
-
-                          // console.log(txField, headers[txField]);
-                          if (rawTx[txField] === undefined) {
-                            rawTx[txField] = headers[txField];
-                          }
-                        }
-                        resolve();
-
-                      case 3:
-                      case 'end':
-                        return _context3.stop();
+                    if (config.logger.error) {
+                      config.logger.error(error);
                     }
+
+                    callback(error);
                   }
-                }, null, this);
-              }));
-            }));
-
-          case 31:
-
-            // console.log('rawTx', rawTx)
-
-            assert.equal((0, _typeof3.default)(rawTx.expiration), 'string', 'expecting expiration: iso date time string');
-            assert.equal((0, _typeof3.default)(rawTx.ref_block_num), 'number', 'expecting ref_block_num number');
-            assert.equal((0, _typeof3.default)(rawTx.ref_block_prefix), 'number', 'expecting ref_block_prefix number');
-
-            rawTx.context_free_actions = arg.context_free_actions;
-            rawTx.actions = arg.actions;
-            rawTx.transaction_extensions = arg.transaction_extensions;
-
-            // Resolve shorthand
-            txObject = Transaction.fromObject(rawTx);
-            // console.log('txObject', txObject)
-
-            buf = Fcbuffer.toBuffer(Transaction, txObject);
-            tr = Transaction.toObject(txObject);
-            transactionId = createHash('sha256').update(buf).digest().toString('hex');
-            sigs = [];
-
-            if (options.sign) {
-              chainIdBuf = Buffer.from(config.chainId, 'hex');
-              packedContextFreeData = Buffer.from(new Uint8Array(32)); // TODO
-
-              signBuf = Buffer.concat([chainIdBuf, buf, packedContextFreeData]);
-
-
-              sigs = config.signProvider({ transaction: tr, buf: signBuf, sign: sign,
-                optionsKeyProvider: options.keyProvider });
-
-              if (!Array.isArray(sigs)) {
-                sigs = [sigs];
-              }
-            }
-
-            // sigs can be strings or Promises
-            Promise.all(sigs).then(function (sigs) {
-              sigs = [].concat.apply([], sigs); // flatten arrays in array
-
-              for (var i = 0; i < sigs.length; i++) {
-                var sig = sigs[i];
-                // normalize (hex to base58 format for example)
-                if (typeof sig === 'string' && sig.length === 130) {
-                  sigs[i] = ecc.Signature.from(sig).toString();
+                  return;
                 }
-              }
 
-              var packedTr = {
-                compression: 'none',
-                transaction: tr,
-                signatures: sigs
-              };
-
-              var mock = config.mockTransactions ? config.mockTransactions() : null;
-              if (mock != null) {
-                assert(/pass|fail/.test(mock), 'mockTransactions should return a string: pass or fail');
-                if (mock === 'pass') {
+                if (!options.broadcast || !network) {
                   callback(null, {
                     transaction_id: transactionId,
-                    mockTransaction: true,
                     broadcast: false,
                     transaction: packedTr
                   });
-                }
-                if (mock === 'fail') {
-                  var error = '[push_transaction mock error] \'fake error\', digest \'' + buf.toString('hex') + '\'';
-
-                  if (config.logger.error) {
-                    config.logger.error(error);
-                  }
-
-                  callback(error);
-                }
-                return;
-              }
-
-              if (!options.broadcast || !network) {
-                callback(null, {
-                  transaction_id: transactionId,
-                  broadcast: false,
-                  transaction: packedTr
-                });
-              } else {
-                network.pushTransaction(packedTr, function (error, processedTransaction) {
-                  if (!error) {
-                    callback(null, Object.assign({
-                      broadcast: true,
-                      transaction: packedTr,
-                      transaction_id: transactionId
-                    }, processedTransaction));
-                  } else {
-                    if (config.logger.error) {
-                      config.logger.error('[push_transaction error] \'' + error.message + '\', transaction \'' + buf.toString('hex') + '\'');
+                } else {
+                  network.pushTransaction(packedTr, function (error, processedTransaction) {
+                    if (!error) {
+                      callback(null, Object.assign({
+                        broadcast: true,
+                        transaction: packedTr,
+                        transaction_id: transactionId
+                      }, processedTransaction));
+                    } else {
+                      if (config.logger.error) {
+                        config.logger.error('[push_transaction error] \'' + error.message + '\', transaction \'' + buf.toString('hex') + '\'');
+                      }
+                      callback(error.message);
                     }
-                    callback(error.message);
-                  }
-                });
-              }
-            }).catch(function (error) {
-              if (config.logger.error) {
-                config.logger.error(error);
-              }
-              callback(error);
-            });
-            return _context4.abrupt('return', returnPromise);
+                  });
+                }
+              }).catch(function (error) {
+                if (config.logger.error) {
+                  config.logger.error(error);
+                }
+                callback(error);
+              });
 
-          case 45:
-          case 'end':
-            return _context4.stop();
+            case 16:
+            case 'end':
+              return _context2.stop();
+          }
         }
-      }
-    }, null, this);
+      }, null, this);
+    }));
+    return returnPromise;
   }
 
   // return WriteApi
@@ -1794,7 +1647,7 @@ var optionsFormatter = function optionsFormatter(option) {
   }
 };
 
-function usage(action, definition, Network, account, config) {
+function usage(type, definition, Network, account, config) {
   var usage = '';
   var out = function out() {
     var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
@@ -1805,21 +1658,36 @@ function usage(action, definition, Network, account, config) {
   out(account);
   out();
 
-  out('ACTION');
-  out(action.name);
+  out('FUNCTION');
+  out(type);
   out();
 
-  var cache = config.abiCache.abi(account);
+  var struct = void 0;
+  if (account === 'eosio' || account === 'eosio.token') {
+    var _Structs = Structs(Object.assign({ defaults: true, network: Network }, config)),
+        structs = _Structs.structs;
 
-  out('PARAMETERS');
-  out(JSON.stringify(schemaFields(cache.schema, action.type), null, 4));
-  out();
+    struct = structs[type];
 
-  var struct = cache.structs[action.type];
+    out('PARAMETERS');
+    out(JSON.stringify(definition, null, 4));
+    out();
 
-  out('EXAMPLE');
-  out(account + '.' + action.name + '(' + JSON.stringify(struct.toObject(), null, 4) + ')');
+    out('EXAMPLE');
+    out(JSON.stringify(struct.toObject(), null, 4));
+  } else {
+    var cache = config.abiCache.abi(account);
+    out('PARAMETERS');
+    out(JSON.stringify(schemaFields(cache.schema, type), null, 4));
+    out();
 
+    struct = cache.structs[type];
+    out('EXAMPLE');
+    out(JSON.stringify(struct.toObject(), null, 4));
+  }
+  if (struct == null) {
+    throw TypeError('Unknown type: ' + type);
+  }
   return usage;
 }
 
@@ -1838,7 +1706,6 @@ var checkError = function checkError(parentErr, logger, parrentRes) {
   };
 };
 
-/** Collapse inheritance (via "base") putting all the fields in one object. */
 function schemaFields(schema, type) {
   var _schema$type = schema[type],
       base = _schema$type.base,
@@ -2482,6 +2349,181 @@ var doesNotThrow = function doesNotThrow(cb, msg) {
 
 /***/ }),
 
+/***/ "0QFX":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var randomBytes = __webpack_require__("rOku");
+var ByteBuffer = __webpack_require__("islT");
+var crypto = __webpack_require__("tXf9");
+var assert = __webpack_require__("N+Om");
+var PublicKey = __webpack_require__("2fkC");
+var PrivateKey = __webpack_require__("iP86");
+var hash = __webpack_require__("DYMz");
+
+var Long = ByteBuffer.Long;
+
+module.exports = {
+    encrypt: encrypt,
+    decrypt: decrypt
+
+    /**
+        Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
+    
+        @throws {Error|TypeError} - "Invalid Key, ..."
+    
+        @arg {PrivateKey} private_key - required and used for decryption
+        @arg {PublicKey} public_key - required and used to calcualte the shared secret
+        @arg {string} [nonce = uniqueNonce()] - assigned a random unique uint64
+    
+        @return {object}
+        @property {string} nonce - random or unique uint64, provides entropy when re-using the same private/public keys.
+        @property {Buffer} message - Plain text message
+        @property {number} checksum - shared secret checksum
+    */
+};function encrypt(private_key, public_key, message) {
+    var nonce = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : uniqueNonce();
+
+    return crypt(private_key, public_key, nonce, message);
+}
+
+/**
+    Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
+
+    @arg {PrivateKey} private_key - required and used for decryption
+    @arg {PublicKey} public_key - required and used to calcualte the shared secret
+    @arg {string} nonce - random or unique uint64, provides entropy when re-using the same private/public keys.
+    @arg {Buffer} message - Encrypted or plain text message
+    @arg {number} checksum - shared secret checksum
+
+    @throws {Error|TypeError} - "Invalid Key, ..."
+
+    @return {Buffer} - message
+*/
+function decrypt(private_key, public_key, nonce, message, checksum) {
+    return crypt(private_key, public_key, nonce, message, checksum).message;
+}
+
+/**
+    @arg {Buffer} message - Encrypted or plain text message (see checksum)
+    @arg {number} checksum - shared secret checksum (null to encrypt, non-null to decrypt)
+    @private
+*/
+function crypt(private_key, public_key, nonce, message, checksum) {
+    private_key = PrivateKey(private_key);
+    if (!private_key) throw new TypeError('private_key is required');
+
+    public_key = PublicKey(public_key);
+    if (!public_key) throw new TypeError('public_key is required');
+
+    nonce = toLongObj(nonce);
+    if (!nonce) throw new TypeError('nonce is required');
+
+    if (!Buffer.isBuffer(message)) {
+        if (typeof message !== 'string') throw new TypeError('message should be buffer or string');
+        message = new Buffer(message, 'binary');
+    }
+    if (checksum && typeof checksum !== 'number') throw new TypeError('checksum should be a number');
+
+    var S = private_key.getSharedSecret(public_key);
+    var ebuf = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN);
+    ebuf.writeUint64(nonce);
+    ebuf.append(S.toString('binary'), 'binary');
+    ebuf = new Buffer(ebuf.copy(0, ebuf.offset).toBinary(), 'binary');
+    var encryption_key = hash.sha512(ebuf);
+
+    // D E B U G
+    // console.log('crypt', {
+    //     priv_to_pub: private_key.toPublic().toString(),
+    //     pub: public_key.toString(),
+    //     nonce: nonce.toString(),
+    //     message: message.length,
+    //     checksum,
+    //     S: S.toString('hex'),
+    //     encryption_key: encryption_key.toString('hex'),
+    // })
+
+    var iv = encryption_key.slice(32, 48);
+    var key = encryption_key.slice(0, 32);
+
+    // check is first 64 bit of sha256 hash treated as uint64_t truncated to 32 bits.
+    var check = hash.sha256(encryption_key);
+    check = check.slice(0, 4);
+    var cbuf = ByteBuffer.fromBinary(check.toString('binary'), ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN);
+    check = cbuf.readUint32();
+
+    if (checksum) {
+        if (check !== checksum) throw new Error('Invalid key');
+        message = cryptoJsDecrypt(message, key, iv);
+    } else {
+        message = cryptoJsEncrypt(message, key, iv);
+    }
+    return { nonce: nonce, message: message, checksum: check };
+}
+
+/** This method does not use a checksum, the returned data must be validated some other way.
+
+    @arg {string|Buffer} message - ciphertext binary format
+    @arg {string<utf8>|Buffer} key - 256bit
+    @arg {string<utf8>|Buffer} iv - 128bit
+
+    @return {Buffer}
+*/
+function cryptoJsDecrypt(message, key, iv) {
+    assert(message, "Missing cipher text");
+    message = toBinaryBuffer(message);
+    var decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    // decipher.setAutoPadding(true)
+    message = Buffer.concat([decipher.update(message), decipher.final()]);
+    return message;
+}
+
+/** This method does not use a checksum, the returned data must be validated some other way.
+    @arg {string|Buffer} message - plaintext binary format
+    @arg {string<utf8>|Buffer} key - 256bit
+    @arg {string<utf8>|Buffer} iv - 128bit
+
+    @return {Buffer}
+*/
+function cryptoJsEncrypt(message, key, iv) {
+    assert(message, "Missing plain text");
+    message = toBinaryBuffer(message);
+    var cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    // cipher.setAutoPadding(true)
+    message = Buffer.concat([cipher.update(message), cipher.final()]);
+    return message;
+}
+
+/** @return {string} unique 64 bit unsigned number string.  Being time based, this is careful to never choose the same nonce twice.  This value could be recorded in the blockchain for a long time.
+*/
+function uniqueNonce() {
+    if (unique_nonce_entropy === null) {
+        var b = new Uint8Array(randomBytes(2));
+        unique_nonce_entropy = parseInt(b[0] << 8 | b[1], 10);
+    }
+    var long = Long.fromNumber(Date.now());
+    var entropy = ++unique_nonce_entropy % 0xFFFF;
+    // console.log('uniqueNonce date\t', ByteBuffer.allocate(8).writeUint64(long).toHex(0))
+    // console.log('uniqueNonce entropy\t', ByteBuffer.allocate(8).writeUint64(Long.fromNumber(entropy)).toHex(0))
+    long = long.shiftLeft(16).or(Long.fromNumber(entropy));
+    // console.log('uniqueNonce final\t', ByteBuffer.allocate(8).writeUint64(long).toHex(0))
+    return long.toString();
+}
+var unique_nonce_entropy = null;
+// for(let i=1; i < 10; i++) key.uniqueNonce()
+
+var toLongObj = function toLongObj(o) {
+    return o ? Long.isLong(o) ? o : Long.fromString(o) : o;
+};
+var toBinaryBuffer = function toBinaryBuffer(o) {
+    return o ? Buffer.isBuffer(o) ? o : new Buffer(o, 'binary') : o;
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
+
+/***/ }),
+
 /***/ "0kY3":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3083,7 +3125,7 @@ module.exports = __webpack_require__("HJMx");
 /***/ "1QQ/":
 /***/ (function(module, exports) {
 
-module.exports = {"_args":[["bigi@1.4.2","/Users/wunan/bd/eosbet-web"]],"_from":"bigi@1.4.2","_id":"bigi@1.4.2","_inBundle":false,"_integrity":"sha1-nGZalfiLiwj8Bc/XMfVhhZ1yWCU=","_location":"/bigi","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"bigi@1.4.2","name":"bigi","escapedName":"bigi","rawSpec":"1.4.2","saveSpec":null,"fetchSpec":"1.4.2"},"_requiredBy":["/ecurve","/eosjs-ecc"],"_resolved":"http://r.cnpmjs.org/bigi/download/bigi-1.4.2.tgz","_spec":"1.4.2","_where":"/Users/wunan/bd/eosbet-web","bugs":{"url":"https://github.com/cryptocoinjs/bigi/issues"},"dependencies":{},"description":"Big integers.","devDependencies":{"coveralls":"^2.11.2","istanbul":"^0.3.5","jshint":"^2.5.1","mocha":"^2.1.0","mochify":"^2.1.0"},"homepage":"https://github.com/cryptocoinjs/bigi#readme","keywords":["cryptography","math","bitcoin","arbitrary","precision","arithmetic","big","integer","int","number","biginteger","bigint","bignumber","decimal","float"],"main":"./lib/index.js","name":"bigi","repository":{"url":"git+https://github.com/cryptocoinjs/bigi.git","type":"git"},"scripts":{"browser-test":"mochify --wd -R spec","coverage":"istanbul cover ./node_modules/.bin/_mocha -- --reporter list test/*.js","coveralls":"npm run-script coverage && node ./node_modules/.bin/coveralls < coverage/lcov.info","jshint":"jshint --config jshint.json lib/*.js ; true","test":"_mocha -- test/*.js","unit":"mocha"},"testling":{"files":"test/*.js","harness":"mocha","browsers":["ie/9..latest","firefox/latest","chrome/latest","safari/6.0..latest","iphone/6.0..latest","android-browser/4.2..latest"]},"version":"1.4.2"}
+module.exports = {"_args":[["bigi@1.4.2","/Users/wunan/bd/eosbet-web"]],"_from":"bigi@1.4.2","_id":"bigi@1.4.2","_inBundle":false,"_integrity":"sha1-nGZalfiLiwj8Bc/XMfVhhZ1yWCU=","_location":"/bigi","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"bigi@1.4.2","name":"bigi","escapedName":"bigi","rawSpec":"1.4.2","saveSpec":null,"fetchSpec":"1.4.2"},"_requiredBy":["/ecurve","/eosjs-ecc","/eosjs/eosjs-ecc"],"_resolved":"http://r.cnpmjs.org/bigi/download/bigi-1.4.2.tgz","_spec":"1.4.2","_where":"/Users/wunan/bd/eosbet-web","bugs":{"url":"https://github.com/cryptocoinjs/bigi/issues"},"dependencies":{},"description":"Big integers.","devDependencies":{"coveralls":"^2.11.2","istanbul":"^0.3.5","jshint":"^2.5.1","mocha":"^2.1.0","mochify":"^2.1.0"},"homepage":"https://github.com/cryptocoinjs/bigi#readme","keywords":["cryptography","math","bitcoin","arbitrary","precision","arithmetic","big","integer","int","number","biginteger","bigint","bignumber","decimal","float"],"main":"./lib/index.js","name":"bigi","repository":{"url":"git+https://github.com/cryptocoinjs/bigi.git","type":"git"},"scripts":{"browser-test":"mochify --wd -R spec","coverage":"istanbul cover ./node_modules/.bin/_mocha -- --reporter list test/*.js","coveralls":"npm run-script coverage && node ./node_modules/.bin/coveralls < coverage/lcov.info","jshint":"jshint --config jshint.json lib/*.js ; true","test":"_mocha -- test/*.js","unit":"mocha"},"testling":{"files":"test/*.js","harness":"mocha","browsers":["ie/9..latest","firefox/latest","chrome/latest","safari/6.0..latest","iphone/6.0..latest","android-browser/4.2..latest"]},"version":"1.4.2"}
 
 /***/ }),
 
@@ -3239,6 +3281,195 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
+
+/***/ }),
+
+/***/ "2fkC":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var assert = __webpack_require__("N+Om");
+var ecurve = __webpack_require__("3btT");
+var BigInteger = __webpack_require__("QNdi");
+var secp256k1 = ecurve.getCurveByName('secp256k1');
+
+var hash = __webpack_require__("DYMz");
+var keyUtils = __webpack_require__("mRCA");
+
+var G = secp256k1.G;
+var n = secp256k1.n;
+
+module.exports = PublicKey;
+
+/** @param {ecurve.Point} public key */
+function PublicKey(Q) {
+    if (typeof Q === 'string') {
+        var publicKey = PublicKey.fromString(Q);
+        assert(publicKey != null, 'Invalid public key');
+        return publicKey;
+    } else if (Buffer.isBuffer(Q)) {
+        return PublicKey.fromBuffer(Q);
+    } else if ((typeof Q === 'undefined' ? 'undefined' : _typeof(Q)) === 'object' && Q.Q) {
+        return PublicKey(Q.Q);
+    }
+
+    assert.equal(typeof Q === 'undefined' ? 'undefined' : _typeof(Q), 'object', 'Invalid public key');
+    assert.equal(_typeof(Q.compressed), 'boolean', 'Invalid public key');
+
+    function toBuffer() {
+        var compressed = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : Q.compressed;
+
+        return Q.getEncoded(compressed);
+    }
+
+    var pubdata = void 0; // cache
+
+    // /**
+    //     @todo secp224r1
+    //     @return {string} PUB_K1_base58pubkey..
+    // */
+    // function toString() {
+    //     if(pubdata) {
+    //         return pubdata
+    //     }
+    //     pubdata = `PUB_K1_` + keyUtils.checkEncode(toBuffer(), 'K1')
+    //     return pubdata;
+    // }
+
+    /** @todo rename to toStringLegacy
+     * @arg {string} [pubkey_prefix = 'EOS'] - public key prefix
+    */
+    function toString() {
+        var pubkey_prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'EOS';
+
+        return pubkey_prefix + keyUtils.checkEncode(toBuffer());
+    }
+
+    function toUncompressed() {
+        var buf = Q.getEncoded(false);
+        var point = ecurve.Point.decodeFrom(secp256k1, buf);
+        return PublicKey.fromPoint(point);
+    }
+
+    /** @deprecated */
+    function child(offset) {
+        console.error('Deprecated warning: PublicKey.child');
+
+        assert(Buffer.isBuffer(offset), "Buffer required: offset");
+        assert.equal(offset.length, 32, "offset length");
+
+        offset = Buffer.concat([toBuffer(), offset]);
+        offset = hash.sha256(offset);
+
+        var c = BigInteger.fromBuffer(offset);
+
+        if (c.compareTo(n) >= 0) throw new Error("Child offset went out of bounds, try again");
+
+        var cG = G.multiply(c);
+        var Qprime = Q.add(cG);
+
+        if (secp256k1.isInfinity(Qprime)) throw new Error("Child offset derived to an invalid key, try again");
+
+        return PublicKey.fromPoint(Qprime);
+    }
+
+    function toHex() {
+        return toBuffer().toString('hex');
+    }
+
+    return {
+        Q: Q,
+        toString: toString,
+        // toStringLegacy,
+        toUncompressed: toUncompressed,
+        toBuffer: toBuffer,
+        child: child,
+        toHex: toHex
+    };
+}
+
+PublicKey.isValid = function (text) {
+    try {
+        PublicKey(text);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+PublicKey.fromBinary = function (bin) {
+    return PublicKey.fromBuffer(new Buffer(bin, 'binary'));
+};
+
+PublicKey.fromBuffer = function (buffer) {
+    return PublicKey(ecurve.Point.decodeFrom(secp256k1, buffer));
+};
+
+PublicKey.fromPoint = function (point) {
+    return PublicKey(point);
+};
+
+/**
+    @arg {string} public_key - like PUB_K1_base58pubkey..
+    @arg {string} [pubkey_prefix = 'EOS'] - public key prefix
+    @return PublicKey or `null` (invalid)
+*/
+PublicKey.fromString = function (public_key) {
+    var pubkey_prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'EOS';
+
+    try {
+        return PublicKey.fromStringOrThrow(public_key, pubkey_prefix);
+    } catch (e) {
+        return null;
+    }
+};
+
+/**
+    @arg {string} public_key - like PUB_K1_base58pubkey..
+    @arg {string} [pubkey_prefix = 'EOS'] - public key prefix
+
+    @throws {Error} if public key is invalid
+
+    @return PublicKey
+*/
+PublicKey.fromStringOrThrow = function (public_key) {
+    var pubkey_prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'EOS';
+
+    assert.equal(typeof public_key === 'undefined' ? 'undefined' : _typeof(public_key), 'string', 'public_key');
+    var match = public_key.match(/^PUB_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/);
+    if (match === null) {
+        // legacy
+        // TELOS addition: support for variable public_key prefixes
+        var prefix_match = new RegExp("^" + pubkey_prefix);
+        if (prefix_match.test(public_key)) {
+            public_key = public_key.substring(pubkey_prefix.length);
+        }
+        return PublicKey.fromBuffer(keyUtils.checkDecode(public_key));
+    }
+    assert(match.length === 3, 'Expecting public key like: PUB_K1_base58pubkey..');
+
+    var _match = _slicedToArray(match, 3),
+        keyType = _match[1],
+        keyString = _match[2];
+
+    assert.equal(keyType, 'K1', 'K1 private key expected');
+    return PublicKey.fromBuffer(keyUtils.checkDecode(keyString, keyType));
+};
+
+PublicKey.fromHex = function (hex) {
+    return PublicKey.fromBuffer(new Buffer(hex, 'hex'));
+};
+
+PublicKey.fromStringHex = function (hex) {
+    return PublicKey.fromString(new Buffer(hex, 'hex'));
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
 
 /***/ }),
 
@@ -3570,9 +3801,9 @@ var fromBuffer = function fromBuffer(types, structs) {
 };
 
 var toBuffer = function toBuffer(types, structs) {
-  return function (typeName, value) {
+  return function (typeName, object) {
     assert.equal(typeof typeName === 'undefined' ? 'undefined' : _typeof(typeName), 'string', 'typeName (type or struct name)');
-    assert(value != null, 'value is required');
+    assert.equal(typeof object === 'undefined' ? 'undefined' : _typeof(object), 'object', 'object');
 
     var type = types[typeName];
     if (type) {
@@ -3581,7 +3812,7 @@ var toBuffer = function toBuffer(types, structs) {
       type = structs[typeName];
     }
     assert(type, 'missing type or struct: ' + typeName);
-    return Fcbuffer.toBuffer(type, value);
+    return Fcbuffer.toBuffer(type, object);
   };
 };
 
@@ -27247,6 +27478,25 @@ module.exports = EosApi;
 
 /***/ }),
 
+/***/ "B7Bh":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Aes = __webpack_require__("0QFX");
+var PrivateKey = __webpack_require__("iP86");
+var PublicKey = __webpack_require__("2fkC");
+var Signature = __webpack_require__("n0ja");
+var key_utils = __webpack_require__("mRCA");
+
+module.exports = {
+    Aes: Aes, PrivateKey: PrivateKey, PublicKey: PublicKey,
+    Signature: Signature, key_utils: key_utils
+};
+
+/***/ }),
+
 /***/ "BCiZ":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29015,6 +29265,75 @@ exports.default = aria.Dialog;
 
 /***/ }),
 
+/***/ "DYMz":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createHash = __webpack_require__("BVsN");
+var createHmac = __webpack_require__("ARY+");
+
+/** @namespace hash */
+
+/** @arg {string|Buffer} data
+    @arg {string} [resultEncoding = null] - 'hex', 'binary' or 'base64'
+    @return {string|Buffer} - Buffer when resultEncoding is null, or string
+*/
+function sha1(data, resultEncoding) {
+    return createHash('sha1').update(data).digest(resultEncoding);
+}
+
+/** @arg {string|Buffer} data
+    @arg {string} [resultEncoding = null] - 'hex', 'binary' or 'base64'
+    @return {string|Buffer} - Buffer when resultEncoding is null, or string
+*/
+function sha256(data, resultEncoding) {
+    return createHash('sha256').update(data).digest(resultEncoding);
+}
+
+/** @arg {string|Buffer} data
+    @arg {string} [resultEncoding = null] - 'hex', 'binary' or 'base64'
+    @return {string|Buffer} - Buffer when resultEncoding is null, or string
+*/
+function sha512(data, resultEncoding) {
+    return createHash('sha512').update(data).digest(resultEncoding);
+}
+
+function HmacSHA256(buffer, secret) {
+    return createHmac('sha256', secret).update(buffer).digest();
+}
+
+function ripemd160(data) {
+    return createHash('rmd160').update(data).digest();
+}
+
+// function hash160(buffer) {
+//   return ripemd160(sha256(buffer))
+// }
+//
+// function hash256(buffer) {
+//   return sha256(sha256(buffer))
+// }
+
+//
+// function HmacSHA512(buffer, secret) {
+//   return crypto.createHmac('sha512', secret).update(buffer).digest()
+// }
+
+module.exports = {
+    sha1: sha1,
+    sha256: sha256,
+    sha512: sha512,
+    HmacSHA256: HmacSHA256,
+    ripemd160: ripemd160
+    // hash160: hash160,
+    // hash256: hash256,
+    // HmacSHA512: HmacSHA512
+};
+
+/***/ }),
+
 /***/ "DYnR":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29080,9 +29399,9 @@ function AbiCache(network, config) {
       if (Buffer.isBuffer(abi)) {
         abi = JSON.parse(abi);
       }
-      var fcSchema = abiToFcSchema(abi, account);
-      var structs = Structs(abiCacheConfig, fcSchema); // returns {structs, types}
-      return cache[account] = Object.assign({ abi: abi, schema: fcSchema }, structs);
+      var schema = abiToFcSchema(abi);
+      var structs = Structs(abiCacheConfig, schema); // structs = {structs, types}
+      return cache[account] = Object.assign({ abi: abi, schema: schema }, structs);
     }
     var c = cache[account];
     if (c == null) {
@@ -29094,7 +29413,7 @@ function AbiCache(network, config) {
   return config.abiCache;
 }
 
-function abiToFcSchema(abi, account) {
+function abiToFcSchema(abi) {
   // customTypes
   // For FcBuffer
   var abiSchema = {};
@@ -29103,13 +29422,11 @@ function abiToFcSchema(abi, account) {
   if (abi.types) {
     // aliases
     abi.types.forEach(function (e) {
-      // "account_name" = "name"
       abiSchema[e.new_type_name] = e.type;
     });
   }
 
   if (abi.structs) {
-    // transaction_header = fields[actor, permission] extends base "transaction"
     abi.structs.forEach(function (e) {
       var fields = {};
       var _iteratorNormalCompletion = true;
@@ -29142,23 +29459,6 @@ function abiToFcSchema(abi, account) {
         delete abiSchema[e.name].base;
       }
     });
-  }
-
-  if (abi.actions) {
-    // setprods = set_producers
-    abi.actions.forEach(function (action) {
-      // @example action = {name: 'setprods', type: 'set_producers'}
-      var type = abiSchema[action.type];
-      if (!type) {
-        console.error('Missing abiSchema type', action.type, account); //, abi, abiSchema)
-      } else {
-        type.action = {
-          name: action.name,
-          account: account
-        };
-      }
-    });
-    // console.log('abiSchema', abiSchema);
   }
 
   return abiSchema;
@@ -31876,6 +32176,63 @@ function isnan (val) {
 
 /***/ }),
 
+/***/ "FYN1":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+module.exports = function enforce(type, value) {
+  // Copied from https://github.com/bitcoinjs/bitcoinjs-lib
+  switch (type) {
+    case 'Array':
+      {
+        if (Array.isArray(value)) return;
+        break;
+      }
+
+    case 'Boolean':
+      {
+        if (typeof value === 'boolean') return;
+        break;
+      }
+
+    case 'Buffer':
+      {
+        if (Buffer.isBuffer(value)) return;
+        break;
+      }
+
+    case 'Number':
+      {
+        if (typeof value === 'number') return;
+        break;
+      }
+
+    case 'String':
+      {
+        if (typeof value === 'string') return;
+        break;
+      }
+
+    default:
+      {
+        if (getName(value.constructor) === getName(type)) return;
+      }
+  }
+
+  throw new TypeError('Expected ' + (getName(type) || type) + ', got ' + value);
+};
+
+function getName(fn) {
+  // Why not fn.name: https://kangax.github.io/compat-table/es6/#function_name_property
+  var match = fn.toString().match(/function (.*?)\(/);
+  return match ? match[1] : null;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
+
+/***/ }),
+
 /***/ "FZ+f":
 /***/ (function(module, exports) {
 
@@ -33356,7 +33713,222 @@ module.exports = __webpack_require__("jmaC");
 /***/ "Hujw":
 /***/ (function(module, exports) {
 
-module.exports = {"get_actions":{"params":{"account_name":"account_name","pos":{"type":"int32?","doc":"An absolute sequence positon -1 is the end/last action"},"offset":{"type":"int32?","doc":"The number of actions relative to pos, negative numbers return [pos-offset,pos), positive numbers return [pos,pos+offset)"}},"results":{"actions":"ordered_action_result[]","last_irreversible_block":"uint32","time_limit_exceeded_error":"bool?"},"structs":[{"name":"ordered_action_result","fields":{"global_action_seq":"uint64","account_action_seq":"int32","block_num":"uint32","block_time":"block_timestamp_type","action_trace":"variant"}}]},"get_transaction":{"brief":"Retrieve a transaction from the blockchain.","params":{"id":"transaction_id_type","block_num_hint":{"type":"uint32?","default":0,"doc":"A non-zero block number allows shorter transaction IDs (8 hex, 4 bytes)"}},"results":{"id":"transaction_id_type","trx":"variant","block_time":"block_timestamp_type","block_num":"uint32","last_irreversible_block":"uint32","traces":"variant[]"}},"get_key_accounts":{"params":{"public_key":"public_key_type"},"results":{"account_names":"account_name[]"}},"get_controlled_accounts":{"params":{"controlling_account":"account_name"},"results":{"controlled_accounts":"account_name[]"}}}
+module.exports = {"get_actions":{"params":{"account_name":"account_name","pos":{"type":"int32?","doc":"An absolute sequence positon -1 is the end/last action"},"offset":{"type":"int32?","doc":"The number of actions relative to pos, negative numbers return [pos-offset,pos), positive numbers return [pos,pos+offset)"}},"results":{"actions":"ordered_action_result[]","last_irreversible_block":"uint32","time_limit_exceeded_error":"bool?"},"structs":[{"name":"ordered_action_result","fields":{"global_action_seq":"uint64","account_action_seq":"int32","block_num":"uint32","block_time":"block_timestamp_type","action_trace":"variant"}}]},"get_transaction":{"brief":"Retrieve a transaction from the blockchain.","params":{"id":"transaction_id_type","block_num_hint":"uint32?"},"results":{"id":"transaction_id_type","trx":"variant","block_time":"block_timestamp_type","block_num":"uint32","last_irreversible_block":"uint32","traces":"variant[]"}},"get_key_accounts":{"params":{"public_key":"public_key_type"},"results":{"account_names":"account_name[]"}},"get_controlled_accounts":{"params":{"controlling_account":"account_name"},"results":{"controlled_accounts":"account_name[]"}}}
+
+/***/ }),
+
+/***/ "I93p":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Aes = __webpack_require__("0QFX");
+var PrivateKey = __webpack_require__("iP86");
+var PublicKey = __webpack_require__("2fkC");
+var Signature = __webpack_require__("n0ja");
+var key_utils = __webpack_require__("mRCA");
+var hash = __webpack_require__("DYMz");
+
+/**
+    [Wallet Import Format](https://en.bitcoin.it/wiki/Wallet_import_format)
+    @typedef {string} wif
+*/
+/**
+    EOSKey..
+    @typedef {string} pubkey
+*/
+
+/** @namespace */
+var ecc = {
+    /**
+      Initialize by running some self-checking code.  This should take a
+      second to gather additional CPU entropy used during private key
+      generation.
+       Initialization happens once even if called multiple times.
+       @return {Promise}
+    */
+    initialize: PrivateKey.initialize,
+
+    /**
+      Does not pause to gather CPU entropy.
+      @return {Promise<PrivateKey>} test key
+    */
+    unsafeRandomKey: function unsafeRandomKey() {
+        return PrivateKey.unsafeRandomKey().then(function (key) {
+            return key.toString();
+        });
+    },
+
+    /**
+        @arg {number} [cpuEntropyBits = 0] gather additional entropy
+        from a CPU mining algorithm.  This will already happen once by
+        default.
+         @return {Promise<wif>}
+         @example
+    ecc.randomKey().then(privateKey => {
+    console.log('Private Key:\t', privateKey) // wif
+    console.log('Public Key:\t', ecc.privateToPublic(privateKey)) // EOSkey...
+    })
+    */
+    randomKey: function randomKey(cpuEntropyBits) {
+        return PrivateKey.randomKey(cpuEntropyBits).then(function (key) {
+            return key.toString();
+        });
+    },
+
+    /**
+         @arg {string} seed - any length string.  This is private.  The same
+        seed produces the same private key every time.  At least 128 random
+        bits should be used to produce a good private key.
+        @return {wif}
+         @example ecc.seedPrivate('secret') === wif
+    */
+    seedPrivate: function seedPrivate(seed) {
+        return PrivateKey.fromSeed(seed).toString();
+    },
+
+    /**
+        @arg {wif} wif
+        @arg {string} [pubkey_prefix = 'EOS'] - public key prefix
+         @return {pubkey}
+         @example ecc.privateToPublic(wif) === pubkey
+    */
+    privateToPublic: function privateToPublic(wif) {
+        var pubkey_prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'EOS';
+        return PrivateKey(wif).toPublic().toString(pubkey_prefix);
+    },
+
+    /**
+        @arg {pubkey} pubkey - like EOSKey..
+        @return {boolean} valid
+         @example ecc.isValidPublic(pubkey) === true
+    */
+    isValidPublic: function isValidPublic(pubkey) {
+        return PublicKey.isValid(pubkey);
+    },
+
+    /**
+        @arg {wif} wif
+        @return {boolean} valid
+         @example ecc.isValidPrivate(wif) === true
+    */
+    isValidPrivate: function isValidPrivate(wif) {
+        return PrivateKey.isValid(wif);
+    },
+
+    /**
+        Create a signature using data or a hash.
+         @arg {string|Buffer} data
+        @arg {wif|PrivateKey} privateKey
+        @arg {String} [encoding = 'utf8'] - data encoding (if string)
+         @return {string} string signature
+         @example ecc.sign('I am alive', wif)
+    */
+    sign: function sign(data, privateKey) {
+        var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'utf8';
+
+        if (encoding === true) {
+            throw new TypeError('API changed, use signHash(..) instead');
+        } else {
+            if (encoding === false) {
+                console.log('Warning: ecc.sign hashData parameter was removed');
+            }
+        }
+        return Signature.sign(data, privateKey, encoding).toString();
+    },
+
+    /**
+        @arg {String|Buffer} dataSha256 - sha256 hash 32 byte buffer or string
+        @arg {wif|PrivateKey} privateKey
+        @arg {String} [encoding = 'hex'] - dataSha256 encoding (if string)
+         @return {string} string signature
+    */
+    signHash: function signHash(dataSha256, privateKey) {
+        var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'hex';
+
+        return Signature.signHash(dataSha256, privateKey, encoding).toString();
+    },
+
+    /**
+        Verify signed data.
+         @arg {string|Buffer} signature - buffer or hex string
+        @arg {string|Buffer} data
+        @arg {pubkey|PublicKey} pubkey
+        @arg {boolean} [hashData = true] - sha256 hash data before verify
+        @return {boolean}
+         @example ecc.verify(signature, 'I am alive', pubkey) === true
+    */
+    verify: function verify(signature, data, pubkey) {
+        var encoding = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'utf8';
+
+        if (encoding === true) {
+            throw new TypeError('API changed, use verifyHash(..) instead');
+        } else {
+            if (encoding === false) {
+                console.log('Warning: ecc.verify hashData parameter was removed');
+            }
+        }
+        signature = Signature.from(signature);
+        return signature.verify(data, pubkey, encoding);
+    },
+
+    verifyHash: function verifyHash(signature, dataSha256, pubkey) {
+        var encoding = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'hex';
+
+        signature = Signature.from(signature);
+        return signature.verifyHash(dataSha256, pubkey, encoding);
+    },
+
+
+    /**
+        Recover the public key used to create the signature.
+         @arg {String|Buffer} signature (EOSbase58sig.., Hex, Buffer)
+        @arg {String|Buffer} data - full data
+        @arg {String} [encoding = 'utf8'] - data encoding (if data is a string)
+         @return {pubkey}
+         @example ecc.recover(signature, 'I am alive') === pubkey
+    */
+    recover: function recover(signature, data) {
+        var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'utf8';
+
+        if (encoding === true) {
+            throw new TypeError('API changed, use recoverHash(signature, data) instead');
+        } else {
+            if (encoding === false) {
+                console.log('Warning: ecc.recover hashData parameter was removed');
+            }
+        }
+        signature = Signature.from(signature);
+        return signature.recover(data, encoding).toString();
+    },
+
+    /**
+        @arg {String|Buffer} signature (EOSbase58sig.., Hex, Buffer)
+        @arg {String|Buffer} dataSha256 - sha256 hash 32 byte buffer or hex string
+        @arg {String} [encoding = 'hex'] - dataSha256 encoding (if dataSha256 is a string)
+         @return {PublicKey}
+    */
+    recoverHash: function recoverHash(signature, dataSha256) {
+        var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'hex';
+
+        signature = Signature.from(signature);
+        return signature.recoverHash(dataSha256, encoding).toString();
+    },
+
+    /** @arg {string|Buffer} data - always binary, you may need Buffer.from(data, 'hex')
+        @arg {string} [encoding = 'hex'] - result encoding 'hex', 'binary' or 'base64'
+        @return {string|Buffer} - Buffer when encoding is null, or string
+         @example ecc.sha256('hashme') === '02208b..'
+        @example ecc.sha256(Buffer.from('02208b', 'hex')) === '29a23..'
+    */
+    sha256: function sha256(data) {
+        var resultEncoding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'hex';
+        return hash.sha256(data, resultEncoding);
+    }
+};
+
+module.exports = ecc;
 
 /***/ }),
 
@@ -38095,11 +38667,12 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
       publicKey: "",
       sha256: '',
       lastSixNum: '',
-      luckNum: ''
+      luckNum: '',
+      timeZone: ''
     };
   },
   created: function created() {
-
+    this.timeZone = new Date().getTimezoneOffset() / 60;
     if (this.$route.query && this.$route.query.data) {
       this.verData = JSON.parse(this.$route.query.data);
       //console.log(this.verData)
@@ -38107,6 +38680,38 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
   },
 
   methods: {
+    formatDate: function formatDate(t) {
+      var that = this;
+      t = t.replace(/T/g, " ");
+
+      var u = navigator.userAgent,
+          app = navigator.appVersion;
+      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+      var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      if (isAndroid) {
+        t = t;
+      }
+      if (isIOS) {
+        t = t.replace(/\-/g, "/");
+      }
+
+      var LocalStampTime = new Date(t).getTime() - that.timeZone * 60 * 60 * 1000;
+
+      var YY = new Date(LocalStampTime).getFullYear();
+      var MM = new Date(LocalStampTime).getMonth() + 1;
+      var DD = new Date(LocalStampTime).getDate();
+      var hh = new Date(LocalStampTime).getHours();
+      var mm = new Date(LocalStampTime).getMinutes();
+      var ss = new Date(LocalStampTime).getSeconds();
+
+      MM = MM < 10 ? "0" + MM : MM;
+      DD = DD < 10 ? "0" + DD : DD;
+      hh = hh < 10 ? "0" + hh : hh;
+      mm = mm < 10 ? "0" + mm : mm;
+      ss = ss < 10 ? "0" + ss : ss;
+
+      return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
+    },
     verify: function verify() {
       var that = this;
       this.sha256 = eosjs_ecc_lib_default.a.sha256(this.verData.sig);
@@ -38233,11 +38838,12 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
       publicKey: "",
       sha256: '',
       lastSixNum: '',
-      luckNum: ''
+      luckNum: '',
+      timeZone: ''
     };
   },
   created: function created() {
-
+    this.timeZone = new Date().getTimezoneOffset() / 60;
     if (this.$route.query && this.$route.query.data) {
       this.verData = JSON.parse(this.$route.query.data);
       //console.log(this.verData)
@@ -38245,6 +38851,38 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
   },
 
   methods: {
+    formatDate: function formatDate(t) {
+      var that = this;
+      t = t.replace(/T/g, " ");
+
+      var u = navigator.userAgent,
+          app = navigator.appVersion;
+      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+      var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      if (isAndroid) {
+        t = t;
+      }
+      if (isIOS) {
+        t = t.replace(/\-/g, "/");
+      }
+
+      var LocalStampTime = new Date(t).getTime() - that.timeZone * 60 * 60 * 1000;
+
+      var YY = new Date(LocalStampTime).getFullYear();
+      var MM = new Date(LocalStampTime).getMonth() + 1;
+      var DD = new Date(LocalStampTime).getDate();
+      var hh = new Date(LocalStampTime).getHours();
+      var mm = new Date(LocalStampTime).getMinutes();
+      var ss = new Date(LocalStampTime).getSeconds();
+
+      MM = MM < 10 ? "0" + MM : MM;
+      DD = DD < 10 ? "0" + DD : DD;
+      hh = hh < 10 ? "0" + hh : hh;
+      mm = mm < 10 ? "0" + mm : mm;
+      ss = ss < 10 ? "0" + ss : ss;
+
+      return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
+    },
     verify: function verify() {
       var that = this;
       this.sha256 = eosjs_ecc_lib_default.a.sha256(this.verData.sig);
@@ -38258,14 +38896,14 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-0d286186","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
-var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[_vm._m(0),_vm._v(" "),(_vm.verData)?_c('div',{staticClass:"content"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[1]:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(1),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()])}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-5ffabb78","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
+var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[_vm._m(0),_vm._v(" "),(_vm.verData)?_c('div',{staticClass:"content"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[1]:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(new Date(_vm.verData.bet_time).getTime()))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(1),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()])}
 var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])}]
 var verification_esExports = { render: verification_render, staticRenderFns: verification_staticRenderFns }
 /* harmony default export */ var selectortype_template_index_0_src_components_verification = (verification_esExports);
 // CONCATENATED MODULE: ./src/components/verification.vue
 function verification_injectStyle (ssrContext) {
-  __webpack_require__("piQa")
+  __webpack_require__("eX7N")
 }
 var verification_normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -38278,7 +38916,7 @@ var verification___vue_template_functional__ = false
 /* styles */
 var verification___vue_styles__ = verification_injectStyle
 /* scopeId */
-var verification___vue_scopeId__ = "data-v-0d286186"
+var verification___vue_scopeId__ = "data-v-5ffabb78"
 /* moduleIdentifier (server only) */
 var verification___vue_module_identifier__ = null
 var verification_Component = verification_normalizeComponent(
@@ -39707,28 +40345,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ "NjRr":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("FZ+f")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".verification[data-v-0d286186]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-0d286186]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-0d286186]{font-size:20px;color:#666}.verification .content[data-v-0d286186]{padding:30px 0;font-size:24px}.verification .content .line[data-v-0d286186]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-0d286186]{display:inline-block;width:18%}.verification .content .line span[data-v-0d286186]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-0d286186]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-0d286186]{width:.6rem}.verification .content .btn[data-v-0d286186]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "NoFI":
-/***/ (function(module, exports) {
-
-module.exports = {"version":"eosio::abi/1.0","types":[{"new_type_name":"account_name","type":"name"},{"new_type_name":"permission_name","type":"name"},{"new_type_name":"action_name","type":"name"},{"new_type_name":"transaction_id_type","type":"checksum256"},{"new_type_name":"weight_type","type":"uint16"}],"____comment":"eosio.bios structs: set_account_limits, setpriv, set_global_limits, producer_key, set_producers, require_auth are provided so abi available for deserialization in future.","structs":[{"name":"permission_level","base":"","fields":[{"name":"actor","type":"account_name"},{"name":"permission","type":"permission_name"}]},{"name":"key_weight","base":"","fields":[{"name":"key","type":"public_key"},{"name":"weight","type":"weight_type"}]},{"name":"bidname","base":"","fields":[{"name":"bidder","type":"account_name"},{"name":"newname","type":"account_name"},{"name":"bid","type":"asset"}]},{"name":"permission_level_weight","base":"","fields":[{"name":"permission","type":"permission_level"},{"name":"weight","type":"weight_type"}]},{"name":"wait_weight","base":"","fields":[{"name":"wait_sec","type":"uint32"},{"name":"weight","type":"weight_type"}]},{"name":"authority","base":"","fields":[{"name":"threshold","type":"uint32"},{"name":"keys","type":"key_weight[]"},{"name":"accounts","type":"permission_level_weight[]"},{"name":"waits","type":"wait_weight[]"}]},{"name":"newaccount","base":"","fields":[{"name":"creator","type":"account_name"},{"name":"name","type":"account_name"},{"name":"owner","type":"authority"},{"name":"active","type":"authority"}]},{"name":"setcode","base":"","fields":[{"name":"account","type":"account_name"},{"name":"vmtype","type":"uint8"},{"name":"vmversion","type":"uint8"},{"name":"code","type":"bytes"}]},{"name":"setabi","base":"","fields":[{"name":"account","type":"account_name"},{"name":"abi","type":"bytes"}]},{"name":"updateauth","base":"","fields":[{"name":"account","type":"account_name"},{"name":"permission","type":"permission_name"},{"name":"parent","type":"permission_name"},{"name":"auth","type":"authority"}]},{"name":"deleteauth","base":"","fields":[{"name":"account","type":"account_name"},{"name":"permission","type":"permission_name"}]},{"name":"linkauth","base":"","fields":[{"name":"account","type":"account_name"},{"name":"code","type":"account_name"},{"name":"type","type":"action_name"},{"name":"requirement","type":"permission_name"}]},{"name":"unlinkauth","base":"","fields":[{"name":"account","type":"account_name"},{"name":"code","type":"account_name"},{"name":"type","type":"action_name"}]},{"name":"canceldelay","base":"","fields":[{"name":"canceling_auth","type":"permission_level"},{"name":"trx_id","type":"transaction_id_type"}]},{"name":"onerror","base":"","fields":[{"name":"sender_id","type":"uint128"},{"name":"sent_trx","type":"bytes"}]},{"name":"buyrambytes","base":"","fields":[{"name":"payer","type":"account_name"},{"name":"receiver","type":"account_name"},{"name":"bytes","type":"uint32"}]},{"name":"sellram","base":"","fields":[{"name":"account","type":"account_name"},{"name":"bytes","type":"uint64"}]},{"name":"buyram","base":"","fields":[{"name":"payer","type":"account_name"},{"name":"receiver","type":"account_name"},{"name":"quant","type":"asset"}]},{"name":"delegatebw","base":"","fields":[{"name":"from","type":"account_name"},{"name":"receiver","type":"account_name"},{"name":"stake_net_quantity","type":"asset"},{"name":"stake_cpu_quantity","type":"asset"},{"name":"transfer","type":"bool"}]},{"name":"undelegatebw","base":"","fields":[{"name":"from","type":"account_name"},{"name":"receiver","type":"account_name"},{"name":"unstake_net_quantity","type":"asset"},{"name":"unstake_cpu_quantity","type":"asset"}]},{"name":"refund","base":"","fields":[{"name":"owner","type":"account_name"}]},{"name":"delegated_bandwidth","base":"","fields":[{"name":"from","type":"account_name"},{"name":"to","type":"account_name"},{"name":"net_weight","type":"asset"},{"name":"cpu_weight","type":"asset"}]},{"name":"user_resources","base":"","fields":[{"name":"owner","type":"account_name"},{"name":"net_weight","type":"asset"},{"name":"cpu_weight","type":"asset"},{"name":"ram_bytes","type":"uint64"}]},{"name":"total_resources","base":"","fields":[{"name":"owner","type":"account_name"},{"name":"net_weight","type":"asset"},{"name":"cpu_weight","type":"asset"},{"name":"ram_bytes","type":"uint64"}]},{"name":"refund_request","base":"","fields":[{"name":"owner","type":"account_name"},{"name":"request_time","type":"time_point_sec"},{"name":"net_amount","type":"asset"},{"name":"cpu_amount","type":"asset"}]},{"name":"blockchain_parameters","base":"","fields":[{"name":"max_block_net_usage","type":"uint64"},{"name":"target_block_net_usage_pct","type":"uint32"},{"name":"max_transaction_net_usage","type":"uint32"},{"name":"base_per_transaction_net_usage","type":"uint32"},{"name":"net_usage_leeway","type":"uint32"},{"name":"context_free_discount_net_usage_num","type":"uint32"},{"name":"context_free_discount_net_usage_den","type":"uint32"},{"name":"max_block_cpu_usage","type":"uint32"},{"name":"target_block_cpu_usage_pct","type":"uint32"},{"name":"max_transaction_cpu_usage","type":"uint32"},{"name":"min_transaction_cpu_usage","type":"uint32"},{"name":"max_transaction_lifetime","type":"uint32"},{"name":"deferred_trx_expiration_window","type":"uint32"},{"name":"max_transaction_delay","type":"uint32"},{"name":"max_inline_action_size","type":"uint32"},{"name":"max_inline_action_depth","type":"uint16"},{"name":"max_authority_depth","type":"uint16"}]},{"name":"eosio_global_state","base":"blockchain_parameters","fields":[{"name":"max_ram_size","type":"uint64"},{"name":"total_ram_bytes_reserved","type":"uint64"},{"name":"total_ram_stake","type":"int64"},{"name":"last_producer_schedule_update","type":"block_timestamp_type"},{"name":"last_pervote_bucket_fill","type":"uint64"},{"name":"pervote_bucket","type":"int64"},{"name":"perblock_bucket","type":"int64"},{"name":"total_unpaid_blocks","type":"uint32"},{"name":"total_activated_stake","type":"int64"},{"name":"thresh_activated_stake_time","type":"uint64"},{"name":"last_producer_schedule_size","type":"uint16"},{"name":"total_producer_vote_weight","type":"float64"},{"name":"last_name_close","type":"block_timestamp_type"}]},{"name":"producer_info","base":"","fields":[{"name":"owner","type":"account_name"},{"name":"total_votes","type":"float64"},{"name":"producer_key","type":"public_key"},{"name":"is_active","type":"bool"},{"name":"url","type":"string"},{"name":"unpaid_blocks","type":"uint32"},{"name":"last_claim_time","type":"uint64"},{"name":"location","type":"uint16"}]},{"name":"regproducer","base":"","fields":[{"name":"producer","type":"account_name"},{"name":"producer_key","type":"public_key"},{"name":"url","type":"string"},{"name":"location","type":"uint16"}]},{"name":"unregprod","base":"","fields":[{"name":"producer","type":"account_name"}]},{"name":"setram","base":"","fields":[{"name":"max_ram_size","type":"uint64"}]},{"name":"regproxy","base":"","fields":[{"name":"proxy","type":"account_name"},{"name":"isproxy","type":"bool"}]},{"name":"voteproducer","base":"","fields":[{"name":"voter","type":"account_name"},{"name":"proxy","type":"account_name"},{"name":"producers","type":"account_name[]"}]},{"name":"voter_info","base":"","fields":[{"name":"owner","type":"account_name"},{"name":"proxy","type":"account_name"},{"name":"producers","type":"account_name[]"},{"name":"staked","type":"int64"},{"name":"last_vote_weight","type":"float64"},{"name":"proxied_vote_weight","type":"float64"},{"name":"is_proxy","type":"bool"}]},{"name":"claimrewards","base":"","fields":[{"name":"owner","type":"account_name"}]},{"name":"setpriv","base":"","fields":[{"name":"account","type":"account_name"},{"name":"is_priv","type":"int8"}]},{"name":"rmvproducer","base":"","fields":[{"name":"producer","type":"account_name"}]},{"name":"set_account_limits","base":"","fields":[{"name":"account","type":"account_name"},{"name":"ram_bytes","type":"int64"},{"name":"net_weight","type":"int64"},{"name":"cpu_weight","type":"int64"}]},{"name":"set_global_limits","base":"","fields":[{"name":"cpu_usec_per_period","type":"int64"}]},{"name":"producer_key","base":"","fields":[{"name":"producer_name","type":"account_name"},{"name":"block_signing_key","type":"public_key"}]},{"name":"set_producers","base":"","fields":[{"name":"schedule","type":"producer_key[]"}]},{"name":"require_auth","base":"","fields":[{"name":"from","type":"account_name"}]},{"name":"setparams","base":"","fields":[{"name":"params","type":"blockchain_parameters"}]},{"name":"connector","base":"","fields":[{"name":"balance","type":"asset"},{"name":"weight","type":"float64"}]},{"name":"exchange_state","base":"","fields":[{"name":"supply","type":"asset"},{"name":"base","type":"connector"},{"name":"quote","type":"connector"}]},{"name":"namebid_info","base":"","fields":[{"name":"newname","type":"account_name"},{"name":"high_bidder","type":"account_name"},{"name":"high_bid","type":"int64"},{"name":"last_bid_time","type":"uint64"}]}],"actions":[{"name":"newaccount","type":"newaccount","ricardian_contract":""},{"name":"setcode","type":"setcode","ricardian_contract":""},{"name":"setabi","type":"setabi","ricardian_contract":""},{"name":"updateauth","type":"updateauth","ricardian_contract":""},{"name":"deleteauth","type":"deleteauth","ricardian_contract":""},{"name":"linkauth","type":"linkauth","ricardian_contract":""},{"name":"unlinkauth","type":"unlinkauth","ricardian_contract":""},{"name":"canceldelay","type":"canceldelay","ricardian_contract":""},{"name":"onerror","type":"onerror","ricardian_contract":""},{"name":"buyrambytes","type":"buyrambytes","ricardian_contract":""},{"name":"buyram","type":"buyram","ricardian_contract":""},{"name":"sellram","type":"sellram","ricardian_contract":""},{"name":"delegatebw","type":"delegatebw","ricardian_contract":""},{"name":"undelegatebw","type":"undelegatebw","ricardian_contract":""},{"name":"refund","type":"refund","ricardian_contract":""},{"name":"regproducer","type":"regproducer","ricardian_contract":""},{"name":"setram","type":"setram","ricardian_contract":""},{"name":"bidname","type":"bidname","ricardian_contract":""},{"name":"unregprod","type":"unregprod","ricardian_contract":""},{"name":"regproxy","type":"regproxy","ricardian_contract":""},{"name":"voteproducer","type":"voteproducer","ricardian_contract":""},{"name":"claimrewards","type":"claimrewards","ricardian_contract":""},{"name":"setpriv","type":"setpriv","ricardian_contract":""},{"name":"rmvproducer","type":"rmvproducer","ricardian_contract":""},{"name":"setalimits","type":"set_account_limits","ricardian_contract":""},{"name":"setglimits","type":"set_global_limits","ricardian_contract":""},{"name":"setprods","type":"set_producers","ricardian_contract":""},{"name":"reqauth","type":"require_auth","ricardian_contract":""},{"name":"setparams","type":"setparams","ricardian_contract":""}],"tables":[{"name":"producers","type":"producer_info","index_type":"i64","key_names":["owner"],"key_types":["uint64"]},{"name":"global","type":"eosio_global_state","index_type":"i64","key_names":[],"key_types":[]},{"name":"voters","type":"voter_info","index_type":"i64","key_names":["owner"],"key_types":["account_name"]},{"name":"userres","type":"user_resources","index_type":"i64","key_names":["owner"],"key_types":["uint64"]},{"name":"delband","type":"delegated_bandwidth","index_type":"i64","key_names":["to"],"key_types":["uint64"]},{"name":"rammarket","type":"exchange_state","index_type":"i64","key_names":["supply"],"key_types":["uint64"]},{"name":"refunds","type":"refund_request","index_type":"i64","key_names":["owner"],"key_types":["uint64"]},{"name":"namebids","type":"namebid_info","index_type":"i64","key_names":["newname"],"key_types":["account_name"]}],"ricardian_clauses":[],"abi_extensions":[]}
-
-/***/ }),
-
 /***/ "NpIQ":
 /***/ (function(module, exports) {
 
@@ -40643,13 +41259,6 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV
 
 /***/ }),
 
-/***/ "OPeQ":
-/***/ (function(module, exports) {
-
-module.exports = {"version":"eosio::abi/1.0","types":[],"structs":[{"name":"nonce","base":"","fields":[{"name":"value","type":"string"}]}],"actions":[{"name":"nonce","type":"nonce","ricardian_contract":""}],"tables":[],"ricardian_clauses":[],"abi_extensions":[]}
-
-/***/ }),
-
 /***/ "OYls":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -40888,6 +41497,13 @@ module.exports = function (name) {
     }
   };
 };
+
+/***/ }),
+
+/***/ "Pp2f":
+/***/ (function(module, exports) {
+
+module.exports = {"account_name":"name","action_name":"name","authority":{"base":"","fields":{"threshold":"uint32","keys":"key_weight[]","accounts":"permission_level_weight[]","waits":"wait_weight[]"}},"bidname":{"base":"","action":{"name":"bidname","account":"eosio"},"fields":{"bidder":"account_name","newname":"account_name","bid":"asset"}},"blockchain_parameters":{"base":"","fields":{"max_block_net_usage":"uint64","target_block_net_usage_pct":"uint32","max_transaction_net_usage":"uint32","base_per_transaction_net_usage":"uint32","net_usage_leeway":"uint32","context_free_discount_net_usage_num":"uint32","context_free_discount_net_usage_den":"uint32","max_block_cpu_usage":"uint32","target_block_cpu_usage_pct":"uint32","max_transaction_cpu_usage":"uint32","min_transaction_cpu_usage":"uint32","max_transaction_lifetime":"uint32","deferred_trx_expiration_window":"uint32","max_transaction_delay":"uint32","max_inline_action_size":"uint32","max_inline_action_depth":"uint16","max_authority_depth":"uint16"}},"buyram":{"base":"","action":{"name":"buyram","account":"eosio"},"fields":{"payer":"account_name","receiver":"account_name","quant":"asset"}},"buyrambytes":{"base":"","action":{"name":"buyrambytes","account":"eosio"},"fields":{"payer":"account_name","receiver":"account_name","bytes":"uint32"}},"canceldelay":{"base":"","action":{"name":"canceldelay","account":"eosio"},"fields":{"canceling_auth":"permission_level","trx_id":"transaction_id_type"}},"claimrewards":{"base":"","action":{"name":"claimrewards","account":"eosio"},"fields":{"owner":"account_name"}},"connector":{"base":"","fields":{"balance":"asset","weight":"float64"}},"delegatebw":{"base":"","action":{"name":"delegatebw","account":"eosio"},"fields":{"from":"account_name","receiver":"account_name","stake_net_quantity":"asset","stake_cpu_quantity":"asset","transfer":"bool"}},"delegated_bandwidth":{"base":"","fields":{"from":"account_name","to":"account_name","net_weight":"asset","cpu_weight":"asset"}},"deleteauth":{"base":"","action":{"name":"deleteauth","account":"eosio"},"fields":{"account":"account_name","permission":"permission_name"}},"eosio_global_state":{"base":"blockchain_parameters","fields":{"max_ram_size":"uint64","total_ram_bytes_reserved":"uint64","total_ram_stake":"int64","last_producer_schedule_update":"block_timestamp_type","last_pervote_bucket_fill":"uint64","pervote_bucket":"int64","perblock_bucket":"int64","total_unpaid_blocks":"uint32","total_activated_stake":"int64","thresh_activated_stake_time":"uint64","last_producer_schedule_size":"uint16","total_producer_vote_weight":"float64","last_name_close":"block_timestamp_type"}},"exchange_state":{"base":"","fields":{"supply":"asset","base":"connector","quote":"connector"}},"key_weight":{"base":"","fields":{"key":"public_key","weight":"weight_type"}},"linkauth":{"base":"","action":{"name":"linkauth","account":"eosio"},"fields":{"account":"account_name","code":"account_name","type":"action_name","requirement":"permission_name"}},"namebid_info":{"base":"","fields":{"newname":"account_name","high_bidder":"account_name","high_bid":"int64","last_bid_time":"uint64"}},"newaccount":{"base":"","action":{"name":"newaccount","account":"eosio"},"fields":{"creator":"account_name","name":"account_name","owner":"authority","active":"authority"}},"onerror":{"base":"","action":{"name":"onerror","account":"eosio"},"fields":{"sender_id":"uint128","sent_trx":"bytes"}},"permission_level":{"base":"","fields":{"actor":"account_name","permission":"permission_name"}},"permission_level_weight":{"base":"","fields":{"permission":"permission_level","weight":"weight_type"}},"permission_name":"name","producer_info":{"base":"","fields":{"owner":"account_name","total_votes":"float64","producer_key":"public_key","is_active":"bool","url":"string","unpaid_blocks":"uint32","last_claim_time":"uint64","location":"uint16"}},"producer_key":{"base":"","fields":{"producer_name":"account_name","block_signing_key":"public_key"}},"refund":{"base":"","action":{"name":"refund","account":"eosio"},"fields":{"owner":"account_name"}},"refund_request":{"base":"","fields":{"owner":"account_name","request_time":"time_point_sec","net_amount":"asset","cpu_amount":"asset"}},"regproducer":{"base":"","action":{"name":"regproducer","account":"eosio"},"fields":{"producer":"account_name","producer_key":"public_key","url":"string","location":"uint16"}},"regproxy":{"base":"","action":{"name":"regproxy","account":"eosio"},"fields":{"proxy":"account_name","isproxy":"bool"}},"require_auth":{"base":"","action":{"name":"reqauth","account":"eosio"},"fields":{"from":"account_name"}},"rmvproducer":{"base":"","action":{"name":"rmvproducer","account":"eosio"},"fields":{"producer":"account_name"}},"sellram":{"base":"","action":{"name":"sellram","account":"eosio"},"fields":{"account":"account_name","bytes":"uint64"}},"set_account_limits":{"base":"","action":{"name":"setalimits","account":"eosio"},"fields":{"account":"account_name","ram_bytes":"int64","net_weight":"int64","cpu_weight":"int64"}},"set_global_limits":{"base":"","action":{"name":"setglimits","account":"eosio"},"fields":{"cpu_usec_per_period":"int64"}},"set_producers":{"base":"","action":{"name":"setprods","account":"eosio"},"fields":{"schedule":"producer_key[]"}},"setabi":{"base":"","action":{"name":"setabi","account":"eosio"},"fields":{"account":"account_name","abi":"bytes"}},"setcode":{"base":"","action":{"name":"setcode","account":"eosio"},"fields":{"account":"account_name","vmtype":"uint8","vmversion":"uint8","code":"bytes"}},"setparams":{"base":"","action":{"name":"setparams","account":"eosio"},"fields":{"params":"blockchain_parameters"}},"setpriv":{"base":"","action":{"name":"setpriv","account":"eosio"},"fields":{"account":"account_name","is_priv":"int8"}},"setram":{"base":"","action":{"name":"setram","account":"eosio"},"fields":{"max_ram_size":"uint64"}},"total_resources":{"base":"","fields":{"owner":"account_name","net_weight":"asset","cpu_weight":"asset","ram_bytes":"uint64"}},"transaction_id_type":"checksum256","undelegatebw":{"base":"","action":{"name":"undelegatebw","account":"eosio"},"fields":{"from":"account_name","receiver":"account_name","unstake_net_quantity":"asset","unstake_cpu_quantity":"asset"}},"unlinkauth":{"base":"","action":{"name":"unlinkauth","account":"eosio"},"fields":{"account":"account_name","code":"account_name","type":"action_name"}},"unregprod":{"base":"","action":{"name":"unregprod","account":"eosio"},"fields":{"producer":"account_name"}},"updateauth":{"base":"","action":{"name":"updateauth","account":"eosio"},"fields":{"account":"account_name","permission":"permission_name","parent":"permission_name","auth":"authority"}},"user_resources":{"base":"","fields":{"owner":"account_name","net_weight":"asset","cpu_weight":"asset","ram_bytes":"uint64"}},"voteproducer":{"base":"","action":{"name":"voteproducer","account":"eosio"},"fields":{"voter":"account_name","proxy":"account_name","producers":"account_name[]"}},"voter_info":{"base":"","fields":{"owner":"account_name","proxy":"account_name","producers":"account_name[]","staked":"int64","last_vote_weight":"float64","proxied_vote_weight":"float64","is_proxy":"bool"}},"wait_weight":{"base":"","fields":{"wait_sec":"uint32","weight":"weight_type"}},"weight_type":"uint16"}
 
 /***/ }),
 
@@ -43508,13 +44124,6 @@ module.exports = !$assign || __webpack_require__("S82l")(function () {
 
 /***/ }),
 
-/***/ "U+8V":
-/***/ (function(module, exports) {
-
-module.exports = {"version":"eosio::abi/1.0","types":[{"new_type_name":"account_name","type":"name"}],"structs":[{"name":"transfer","base":"","fields":[{"name":"from","type":"account_name"},{"name":"to","type":"account_name"},{"name":"quantity","type":"asset"},{"name":"memo","type":"string"}]},{"name":"create","base":"","fields":[{"name":"issuer","type":"account_name"},{"name":"maximum_supply","type":"asset"}]},{"name":"issue","base":"","fields":[{"name":"to","type":"account_name"},{"name":"quantity","type":"asset"},{"name":"memo","type":"string"}]},{"name":"account","base":"","fields":[{"name":"balance","type":"asset"}]},{"name":"currency_stats","base":"","fields":[{"name":"supply","type":"asset"},{"name":"max_supply","type":"asset"},{"name":"issuer","type":"account_name"}]}],"actions":[{"name":"transfer","type":"transfer","ricardian_contract":""},{"name":"issue","type":"issue","ricardian_contract":""},{"name":"create","type":"create","ricardian_contract":""}],"tables":[{"name":"accounts","type":"account","index_type":"i64","key_names":["currency"],"key_types":["uint64"]},{"name":"stat","type":"currency_stats","index_type":"i64","key_names":["currency"],"key_types":["uint64"]}],"ricardian_clauses":[],"abi_extensions":[]}
-
-/***/ }),
-
 /***/ "U6yG":
 /***/ (function(module, exports) {
 
@@ -44228,6 +44837,13 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
+
+/***/ }),
+
+/***/ "WrX4":
+/***/ (function(module, exports) {
+
+module.exports = {"account":{"base":"","fields":{"balance":"asset"}},"account_name":"name","create":{"base":"","action":{"name":"create","account":"eosio.token"},"fields":{"issuer":"account_name","maximum_supply":"asset"}},"currency_stats":{"base":"","fields":{"supply":"asset","max_supply":"asset","issuer":"account_name"}},"issue":{"base":"","action":{"name":"issue","account":"eosio.token"},"fields":{"to":"account_name","quantity":"asset","memo":"string"}},"transfer":{"base":"","action":{"name":"transfer","account":"eosio.token"},"fields":{"from":"account_name","to":"account_name","quantity":"asset","memo":"string"}}}
 
 /***/ }),
 
@@ -46378,7 +46994,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV
 /***/ "cB4U":
 /***/ (function(module, exports) {
 
-module.exports = {"name":"uint64","checksum160":"fixed_bytes20","checksum256":"fixed_bytes32","checksum512":"fixed_bytes64","signature":"fixed_bytes65","public_key":"fixed_bytes33","message_type":"fixed_string16","symbol":"uint64","symbol_code":"uint64","field_name":"string","account_name":"name","permission_name":"name","type_name":"string","token_name":"name","table_name":"name","scope_name":"name","action_name":"name","time_point":"int64","time_point_sec":"time","timestamp":"uint32","block_timestamp_type":"timestamp","block_id":"fixed_bytes32","checksum_type":"fixed_bytes32","checksum256_type":"fixed_bytes32","checksum512_type":"fixed_bytes64","checksum160_type":"fixed_bytes20","sha256":"fixed_bytes32","sha512":"fixed_bytes64","sha160":"fixed_bytes20","weight_type":"uint16","block_num_type":"uint32","share_type":"int64","digest_type":"checksum_type","context_free_type":"bytes","unsigned_int":"varuint32","bool":"uint8","extensions_type":{"base":"","fields":{"type":"uint16","data":"bytes"}},"transaction_header":{"base":"","fields":{"expiration":"time","ref_block_num":"uint16","ref_block_prefix":"uint32","max_net_usage_words":"unsigned_int","max_cpu_usage_ms":"uint8","delay_sec":"unsigned_int"}},"transaction":{"base":"transaction_header","fields":{"context_free_actions":"action[]","actions":"action[]","transaction_extensions":"extensions_type[]"}},"signed_transaction":{"base":"transaction","fields":{"signatures":"signature[]","context_free_data":"bytes[]"}},"fields":"field_def[]","field_def":{"fields":{"name":"field_name","type":"type_name"}},"asset":{"fields":{"amount":"share_type","sym":"symbol"}},"producer_key":{"fields":{"producer_name":"account_name","block_signing_key":"public_key"}},"producer_schedule":{"fields":{"version":"uint32","producers":"producer_key[]"}},"chain_config":{"fields":{"target_block_size":"uint32","max_block_size":"uint32","target_block_acts_per_scope":"uint32","max_block_acts_per_scope":"uint32","target_block_acts":"uint32","max_block_acts":"uint32","real_threads":"uint64","max_storage_size":"uint64","max_transaction_lifetime":"uint32","max_authority_depth":"uint16","max_transaction_exec_time":"uint32","max_inline_depth":"uint16","max_inline_action_size":"uint32","max_generated_transaction_size":"uint32"}},"type_def":{"base":"","fields":{"new_type_name":"type_name","type":"type_name"}},"struct_def":{"base":"","fields":{"name":"type_name","base":"type_name","fields":"field_def[]"}},"clause_pair":{"base":"","fields":{"id":"string","body":"string"}},"error_message":{"base":"","fields":{"error_code":"uint64","error_msg":"string"}},"abi_def":{"base":"","fields":{"version":"string","types":"type_def[]","structs":"struct_def[]","actions":"action_def[]","tables":"table_def[]","ricardian_clauses":"clause_pair[]","error_messages":"error_message[]","abi_extensions":"extensions_type[]"}},"table_def":{"base":"","fields":{"name":"table_name","index_type":"type_name","key_names":"field_name[]","key_types":"type_name[]","type":"type_name"}},"permission_level":{"base":"","fields":{"actor":"account_name","permission":"permission_name"}},"action":{"base":"","fields":{"account":"account_name","name":"action_name","authorization":"permission_level[]","data":"bytes"}},"action_def":{"base":"","fields":{"name":"action_name","type":"type_name","ricardian_contract":"string"}},"block_header":{"base":"","fields":{"previous":"checksum256","timestamp":"timestamp","transaction_mroot":"checksum256","action_mroot":"checksum256","block_mroot":"checksum256","producer":"account_name","schedule_version":"uint32","new_producers":"producer_schedule?"}},"packed_transaction":{"fields":{"signatures":"signature[]","compression":"uint8","packed_context_free_data":"bytes","packed_trx":"bytes"}}}
+module.exports = {"name":"uint64","checksum160":"fixed_bytes20","checksum256":"fixed_bytes32","checksum512":"fixed_bytes64","signature":"fixed_bytes65","public_key":"fixed_bytes33","message_type":"fixed_string16","symbol":"uint64","symbol_code":"uint64","field_name":"string","account_name":"name","permission_name":"name","type_name":"string","token_name":"name","table_name":"name","scope_name":"name","action_name":"name","time_point":"int64","time_point_sec":"time","timestamp":"uint32","block_timestamp_type":"timestamp","block_id":"fixed_bytes32","checksum_type":"fixed_bytes32","checksum256_type":"fixed_bytes32","checksum512_type":"fixed_bytes64","checksum160_type":"fixed_bytes20","sha256":"fixed_bytes32","sha512":"fixed_bytes64","sha160":"fixed_bytes20","weight_type":"uint16","block_num_type":"uint32","share_type":"int64","digest_type":"checksum_type","context_free_type":"bytes","unsigned_int":"varuint32","bool":"uint8","extensions_type":{"base":"","fields":{"type":"uint16","data":"bytes"}},"transaction_header":{"base":"","fields":{"expiration":"time","ref_block_num":"uint16","ref_block_prefix":"uint32","max_net_usage_words":"unsigned_int","max_cpu_usage_ms":"uint8","delay_sec":"unsigned_int"}},"transaction":{"base":"transaction_header","fields":{"context_free_actions":"action[]","actions":"action[]","transaction_extensions":"extensions_type[]"}},"signed_transaction":{"base":"transaction","fields":{"signatures":"signature[]","context_free_data":"bytes[]"}},"fields":"field_def[]","field_def":{"fields":{"name":"field_name","type":"type_name"}},"asset":{"fields":{"amount":"share_type","sym":"symbol"}},"producer_key":{"fields":{"producer_name":"account_name","block_signing_key":"public_key"}},"producer_schedule":{"fields":{"version":"uint32","producers":"producer_key[]"}},"chain_config":{"fields":{"target_block_size":"uint32","max_block_size":"uint32","target_block_acts_per_scope":"uint32","max_block_acts_per_scope":"uint32","target_block_acts":"uint32","max_block_acts":"uint32","real_threads":"uint64","max_storage_size":"uint64","max_transaction_lifetime":"uint32","max_authority_depth":"uint16","max_transaction_exec_time":"uint32","max_inline_depth":"uint16","max_inline_action_size":"uint32","max_generated_transaction_size":"uint32"}},"type_def":{"base":"","fields":{"new_type_name":"type_name","type":"type_name"}},"struct_def":{"base":"","fields":{"name":"type_name","base":"type_name","fields":"field_def[]"}},"clause_pair":{"base":"","fields":{"id":"string","body":"string"}},"error_message":{"base":"","fields":{"error_code":"uint64","error_msg":"string"}},"abi_def":{"base":"","fields":{"version":"string","types":"type_def[]","structs":"struct_def[]","actions":"action_def[]","tables":"table_def[]","ricardian_clauses":"clause_pair[]","error_messages":"error_message[]","abi_extensions":"extensions_type[]"}},"table_def":{"base":"","fields":{"name":"table_name","index_type":"type_name","key_names":"field_name[]","key_types":"type_name[]","type":"type_name"}},"action":{"base":"","fields":{"account":"account_name","name":"action_name","authorization":"permission_level[]","data":"bytes"}},"action_def":{"base":"","fields":{"name":"action_name","type":"type_name","ricardian_contract":"string"}},"block_header":{"base":"","fields":{"previous":"checksum256","timestamp":"timestamp","transaction_mroot":"checksum256","action_mroot":"checksum256","block_mroot":"checksum256","producer":"account_name","schedule_version":"uint32","new_producers":"producer_schedule?"}},"packed_transaction":{"fields":{"signatures":"signature[]","compression":"uint8","packed_context_free_data":"bytes","packed_trx":"bytes"}},"nonce":{"action":{"name":"nonce","account":"eosio.null"},"fields":{"value":"string"}}}
 
 /***/ }),
 
@@ -49163,6 +49779,20 @@ var __WEBPACK_AMD_DEFINE_RESULT__;
     main.fecha = fecha;
   }
 })(undefined);
+
+/***/ }),
+
+/***/ "eX7N":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("wEdB");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("rjj0")("66ada67b", content, true, {});
 
 /***/ }),
 
@@ -54980,7 +55610,7 @@ module.exports = __webpack_require__("FeBl").getIterator = function (it) {
 /***/ "h61r":
 /***/ (function(module, exports) {
 
-module.exports = {"get_info":{"brief":"Return general network information.","params":null,"results":"string"},"get_account":{"brief":"Fetch a blockchain account","params":{"account_name":"name"},"results":"string"},"get_code":{"brief":"Fetch smart contract code","params":{"account_name":"name","code_as_wasm":{"type":"bool","default":false}},"results":{"account_name":"name","wast":"string","wasm":"string","code_hash":"sha256","abi":"optional<abi_def>"}},"get_code_hash":{"brief":"","params":{"account_name":"name"},"results":{"account_name":"name","code_hash":"sha256"}},"get_abi":{"params":{"account_name":"name"},"results":{"account_name":"name","abi":"abi_def?"}},"get_raw_code_and_abi":{"params":{"account_name":"name"},"results":{"account_name":"name","wasm":"bytes","abi":"abi_def?"}},"abi_json_to_bin":{"brief":"Manually serialize json into binary hex.  The binayargs is usually stored in Action.data.","params":{"code":"name","action":"name","args":"bytes"},"results":{"binargs":"bytes"}},"abi_bin_to_json":{"brief":"Convert bin hex back into Abi json definition.","params":{"code":"name","action":"name","binargs":"bytes"},"results":{"args":"bytes"}},"get_required_keys":{"params":{"transaction":"transaction","available_keys":"set[public_key]"},"results":"Set[public_key]"},"get_block":{"brief":"Fetch a block from the blockchain.","params":{"block_num_or_id":"string"},"results":"variant","errors":{"unknown block":null}},"get_block_header_state":{"brief":"Fetch the minimum state necessary to validate transaction headers.","params":{"block_num_or_id":"string"},"results":"string","errors":{"block_id_type_exception":"Invalid block ID","unknown_block_exception":"Could not find reversible block"}},"get_table_rows":{"brief":"Fetch smart contract data from an account.","params":{"json":{"type":"bool","default":false},"code":"name","scope":"string","table":"name","table_key":"string","lower_bound":{"type":"string","default":"0"},"upper_bound":{"type":"string","default":"-1"},"limit":{"type":"uint32","default":"10"},"key_type":{"type":"string","doc":"The key type of --index, primary only supports (i64), all others support (i64, i128, i256, float64, float128). Special type 'name' indicates an account name."},"index_position":{"type":"string","doc":"1 - primary (first), 2 - secondary index (in order defined by multi_index), 3 - third index, etc"}},"results":{"rows":{"type":"vector","doc":"One row per item, either encoded as hex String or JSON object"},"more":{"type":"bool","doc":"True if last element in data is not the end and sizeof data() < limit"}}},"get_currency_balance":{"params":{"code":"name","account":"name","symbol":"optional<string>"},"results":"asset[]"},"get_currency_stats":{"params":{"code":"name","symbol":"string"},"results":{"supply":"asset","max_supply":"asset","issuer":"account_name"}},"get_producers":{"brief":"Fetch smart contract data from producer.","params":{"json":{"type":"bool","default":false},"lower_bound":"string","limit":{"type":"uint32","default":"50"}},"results":{"rows":{"type":"vector","doc":"one row per item, either encoded as hex String or JSON object"},"total_producer_vote_weight":{"type":"double","doc":"total vote"},"more":{"type":"string","doc":"fill lower_bound with this value to fetch more rows"}}},"get_producer_schedule":{"brief":"","params":{},"results":{"vector":"proposed"}},"get_scheduled_transactions":{"brief":"","params":{"json":{"type":"bool","default":false},"lower_bound":{"type":"string","doc":"timestamp OR transaction ID"},"limit":{"type":"uint32","default":"50"}},"results":{"vector":"transactions","more":{"type":"string","doc":"fill lower_bound with this to fetch next set of transactions"}}},"push_block":{"brief":"Append a block to the chain database.","params":{"block":"signed_block"},"results":null},"push_transaction":{"brief":"Attempts to push the transaction into the pending queue.","params":{"signed_transaction":"signed_transaction"},"results":{"transaction_id":"fixed_bytes32","processed":"bytes"}},"push_transactions":{"brief":"Attempts to push transactions into the pending queue.","params":{"signed_transaction[]":"signed_transaction"},"results":"vector[push_transaction.results]"}}
+module.exports = {"get_info":{"brief":"Return general network information.","params":null,"results":"string"},"get_account":{"brief":"Fetch a blockchain account","params":{"account_name":"name"},"results":"string"},"get_code":{"brief":"Fetch smart contract code","params":{"account_name":"name","code_as_wasm":{"type":"bool","default":false}},"results":{"account_name":"name","wast":"string","wasm":"string","code_hash":"sha256","abi":"optional<abi_def>"}},"get_abi":{"params":{"account_name":"name"},"results":{"account_name":"name","abi":"abi_def?"}},"get_raw_code_and_abi":{"params":{"account_name":"name"},"results":{"account_name":"name","wasm":"bytes","abi":"abi_def?"}},"abi_json_to_bin":{"brief":"Manually serialize json into binary hex.  The binayargs is usually stored in Action.data.","params":{"code":"name","action":"name","args":"bytes"},"results":{"binargs":"bytes"}},"abi_bin_to_json":{"brief":"Convert bin hex back into Abi json definition.","params":{"code":"name","action":"name","binargs":"bytes"},"results":{"args":"bytes"}},"get_required_keys":{"params":{"transaction":"transaction","available_keys":"set[public_key]"},"results":"Set[public_key]"},"get_block":{"brief":"Fetch a block from the blockchain.","params":{"block_num_or_id":"string"},"results":"variant","errors":{"unknown block":null}},"get_block_header_state":{"brief":"Fetch the minimum state necessary to validate transaction headers.","params":{"block_num_or_id":"string"},"results":"string","errors":{"block_id_type_exception":"Invalid block ID","unknown_block_exception":"Could not find reversible block"}},"get_table_rows":{"brief":"Fetch smart contract data from an account.","params":{"json":{"type":"bool","default":false},"code":"name","scope":"string","table":"name","table_key":"string","lower_bound":{"type":"string","default":"0"},"upper_bound":{"type":"string","default":"-1"},"limit":{"type":"uint32","default":"10"},"key_type":{"type":"string","doc":"The key type of --index, primary only supports (i64), all others support (i64, i128, i256, float64, float128). Special type 'name' indicates an account name."},"index_position":{"type":"string","doc":"1 - primary (first), 2 - secondary index (in order defined by multi_index), 3 - third index, etc"}},"results":{"rows":{"type":"vector","doc":"One row per item, either encoded as hex String or JSON object"},"more":{"type":"bool","doc":"True if last element in data is not the end and sizeof data() < limit"}}},"get_currency_balance":{"params":{"code":"name","account":"name","symbol":"optional<string>"},"results":"asset[]"},"get_currency_stats":{"params":{"code":"name","symbol":"string"},"results":{"supply":"asset","max_supply":"asset","issuer":"account_name"}},"get_producers":{"brief":"Fetch smart contract data from producer.","params":{"json":{"type":"bool","default":false},"lower_bound":"string","limit":{"type":"uint32","default":"50"}},"results":{"rows":{"type":"vector","doc":"one row per item, either encoded as hex String or JSON object"},"total_producer_vote_weight":{"type":"double","doc":"total vote"},"more":{"type":"string","doc":"fill lower_bound with this value to fetch more rows"}}},"get_producer_schedule":{"brief":"","params":{},"results":{"vector":"proposed"}},"get_scheduled_transactions":{"brief":"","params":{"json":{"type":"bool","default":false},"lower_bound":{"type":"string","doc":"timestamp OR transaction ID"},"limit":{"type":"uint32","default":"50"}},"results":{"vector":"transactions","more":{"type":"string","doc":"fill lower_bound with this to fetch next set of transactions"}}},"push_block":{"brief":"Append a block to the chain database.","params":{"block":"signed_block"},"results":null},"push_transaction":{"brief":"Attempts to push the transaction into the pending queue.","params":{"signed_transaction":"signed_transaction"},"results":{"transaction_id":"fixed_bytes32","processed":"bytes"}},"push_transactions":{"brief":"Attempts to push transactions into the pending queue.","params":{"signed_transaction[]":"signed_transaction"},"results":"vector[push_transaction.results]"}}
 
 /***/ }),
 
@@ -56868,6 +57498,572 @@ function config (name) {
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("DuR2")))
+
+/***/ }),
+
+/***/ "iP86":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var ecurve = __webpack_require__("3btT");
+var Point = ecurve.Point;
+var secp256k1 = ecurve.getCurveByName('secp256k1');
+var BigInteger = __webpack_require__("QNdi");
+var assert = __webpack_require__("N+Om");
+
+var hash = __webpack_require__("DYMz");
+var PublicKey = __webpack_require__("2fkC");
+var keyUtils = __webpack_require__("mRCA");
+var createHash = __webpack_require__("BVsN");
+var promiseAsync = __webpack_require__("lyzL");
+
+var G = secp256k1.G;
+var n = secp256k1.n;
+
+module.exports = PrivateKey;
+
+/**
+  @typedef {string} wif - https://en.bitcoin.it/wiki/Wallet_import_format
+  @typedef {string} pubkey - EOSKey..
+  @typedef {ecurve.Point} Point
+*/
+
+/**
+  @param {BigInteger} d
+*/
+function PrivateKey(d) {
+    if (typeof d === 'string') {
+        return PrivateKey.fromString(d);
+    } else if (Buffer.isBuffer(d)) {
+        return PrivateKey.fromBuffer(d);
+    } else if ((typeof d === 'undefined' ? 'undefined' : _typeof(d)) === 'object' && BigInteger.isBigInteger(d.d)) {
+        return PrivateKey(d.d);
+    }
+
+    if (!BigInteger.isBigInteger(d)) {
+        throw new TypeError('Invalid private key');
+    }
+
+    /** @return {string} private key like PVT_K1_base58privatekey.. */
+    function toString() {
+        // todo, use PVT_K1_
+        // return 'PVT_K1_' + keyUtils.checkEncode(toBuffer(), 'K1')
+        return toWif();
+    }
+
+    /**
+        @return  {wif}
+    */
+    function toWif() {
+        var private_key = toBuffer();
+        // checksum includes the version
+        private_key = Buffer.concat([new Buffer([0x80]), private_key]);
+        return keyUtils.checkEncode(private_key, 'sha256x2');
+    }
+
+    var public_key = void 0;
+
+    /**
+        @return {Point}
+    */
+    function toPublic() {
+        if (public_key) {
+            // cache
+            // S L O W in the browser
+            return public_key;
+        }
+        var Q = secp256k1.G.multiply(d);
+        return public_key = PublicKey.fromPoint(Q);
+    }
+
+    function toBuffer() {
+        return d.toBuffer(32);
+    }
+
+    /**
+      ECIES
+      @arg {string|Object} pubkey wif, PublicKey object
+      @return {Buffer} 64 byte shared secret
+    */
+    function getSharedSecret(public_key) {
+        public_key = PublicKey(public_key);
+        var KB = public_key.toUncompressed().toBuffer();
+        var KBP = Point.fromAffine(secp256k1, BigInteger.fromBuffer(KB.slice(1, 33)), // x
+        BigInteger.fromBuffer(KB.slice(33, 65)) // y
+        );
+        var r = toBuffer();
+        var P = KBP.multiply(BigInteger.fromBuffer(r));
+        var S = P.affineX.toBuffer({ size: 32 });
+        // SHA512 used in ECIES
+        return hash.sha512(S);
+    }
+
+    // /** ECIES TODO unit test
+    //   @arg {string|Object} pubkey wif, PublicKey object
+    //   @return {Buffer} 64 byte shared secret
+    // */
+    // function getSharedSecret(public_key) {
+    //     public_key = PublicKey(public_key).toUncompressed()
+    //     var P = public_key.Q.multiply( d );
+    //     var S = P.affineX.toBuffer({size: 32});
+    //     // ECIES, adds an extra sha512
+    //     return hash.sha512(S);
+    // }
+
+    /**
+      @arg {string} name - child key name.
+      @return {PrivateKey}
+       @example activePrivate = masterPrivate.getChildKey('owner').getChildKey('active')
+      @example activePrivate.getChildKey('mycontract').getChildKey('myperm')
+    */
+    function getChildKey(name) {
+        // console.error('WARNING: getChildKey untested against eosd'); // no eosd impl yet
+        var index = createHash('sha256').update(toBuffer()).update(name).digest();
+        return PrivateKey(index);
+    }
+
+    function toHex() {
+        return toBuffer().toString('hex');
+    }
+
+    return {
+        d: d,
+        toWif: toWif,
+        toString: toString,
+        toPublic: toPublic,
+        toBuffer: toBuffer,
+        getSharedSecret: getSharedSecret,
+        getChildKey: getChildKey
+    };
+}
+
+/** @private */
+function parseKey(privateStr) {
+    assert.equal(typeof privateStr === 'undefined' ? 'undefined' : _typeof(privateStr), 'string', 'privateStr');
+    var match = privateStr.match(/^PVT_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/);
+
+    if (match === null) {
+        // legacy WIF - checksum includes the version
+        var versionKey = keyUtils.checkDecode(privateStr, 'sha256x2');
+        var version = versionKey.readUInt8(0);
+        assert.equal(0x80, version, 'Expected version ' + 0x80 + ', instead got ' + version);
+        var _privateKey = PrivateKey.fromBuffer(versionKey.slice(1));
+        var _keyType = 'K1';
+        var format = 'WIF';
+        return { privateKey: _privateKey, format: format, keyType: _keyType };
+    }
+
+    assert(match.length === 3, 'Expecting private key like: PVT_K1_base58privateKey..');
+
+    var _match = _slicedToArray(match, 3),
+        keyType = _match[1],
+        keyString = _match[2];
+
+    assert.equal(keyType, 'K1', 'K1 private key expected');
+    var privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType));
+    return { privateKey: privateKey, format: 'PVT', keyType: keyType };
+}
+
+PrivateKey.fromHex = function (hex) {
+    return PrivateKey.fromBuffer(new Buffer(hex, 'hex'));
+};
+
+PrivateKey.fromBuffer = function (buf) {
+    if (!Buffer.isBuffer(buf)) {
+        throw new Error("Expecting parameter to be a Buffer type");
+    }
+    if (buf.length === 33 && buf[32] === 1) {
+        // remove compression flag
+        buf = buf.slice(0, -1);
+    }
+    if (32 !== buf.length) {
+        throw new Error('Expecting 32 bytes, instead got ' + buf.length);
+    }
+    return PrivateKey(BigInteger.fromBuffer(buf));
+};
+
+/**
+    @arg {string} seed - any length string.  This is private, the same seed
+    produces the same private key every time.
+
+    @return {PrivateKey}
+*/
+PrivateKey.fromSeed = function (seed) {
+    // generate_private_key
+    if (!(typeof seed === 'string')) {
+        throw new Error('seed must be of type string');
+    }
+    return PrivateKey.fromBuffer(hash.sha256(seed));
+};
+
+/**
+  @arg {wif} key
+  @return {boolean} true if key is in the Wallet Import Format
+*/
+PrivateKey.isWif = function (text) {
+    try {
+        assert(parseKey(text).format === 'WIF');
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+/**
+  @arg {wif|Buffer|PrivateKey} key
+  @return {boolean} true if key is convertable to a private key object.
+*/
+PrivateKey.isValid = function (key) {
+    try {
+        PrivateKey(key);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+/** @deprecated */
+PrivateKey.fromWif = function (str) {
+    console.log('PrivateKey.fromWif is deprecated, please use PrivateKey.fromString');
+    return PrivateKey.fromString(str);
+};
+
+/**
+    @throws {AssertError|Error} parsing key
+    @arg {string} privateStr Eosio or Wallet Import Format (wif) -- a secret
+*/
+PrivateKey.fromString = function (privateStr) {
+    return parseKey(privateStr).privateKey;
+};
+
+/**
+  Create a new random private key.
+
+  Call initialize() first to run some self-checking code and gather some CPU
+  entropy.
+
+  @arg {number} [cpuEntropyBits = 0] - additional CPU entropy, this already
+  happens once so it should not be needed again.
+
+  @return {Promise<PrivateKey>} - random private key
+*/
+PrivateKey.randomKey = function () {
+    var cpuEntropyBits = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+    return PrivateKey.initialize().then(function () {
+        return PrivateKey.fromBuffer(keyUtils.random32ByteBuffer({ cpuEntropyBits: cpuEntropyBits }));
+    });
+};
+
+/**
+  @return {Promise<PrivateKey>} for testing, does not require initialize().
+*/
+PrivateKey.unsafeRandomKey = function () {
+    return Promise.resolve(PrivateKey.fromBuffer(keyUtils.random32ByteBuffer({ safe: false })));
+};
+
+var initialized = false,
+    unitTested = false;
+
+/**
+  Run self-checking code and gather CPU entropy.
+
+  Initialization happens once even if called multiple times.
+
+  @return {Promise}
+*/
+function initialize() {
+    if (initialized) {
+        return;
+    }
+
+    unitTest();
+    keyUtils.addEntropy.apply(keyUtils, _toConsumableArray(keyUtils.cpuEntropy()));
+    assert(keyUtils.entropyCount() >= 128, 'insufficient entropy');
+
+    initialized = true;
+}
+
+PrivateKey.initialize = promiseAsync(initialize);
+
+/**
+  Unit test basic private and public key functionality.
+
+  @throws {AssertError}
+*/
+function unitTest() {
+    var pvt = PrivateKey(hash.sha256(''));
+
+    var pvtError = 'key comparison test failed on a known private key';
+    assert.equal(pvt.toWif(), '5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss', pvtError);
+    assert.equal(pvt.toString(), '5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss', pvtError);
+    // assert.equal(pvt.toString(), 'PVT_K1_2jH3nnhxhR3zPUcsKaWWZC9ZmZAnKm3GAnFD1xynGJE1Znuvjd', pvtError)
+
+    var pub = pvt.toPublic();
+    var pubError = 'pubkey string comparison test failed on a known public key';
+    assert.equal(pub.toString(), 'EOS859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM', pubError);
+    // assert.equal(pub.toString(), 'PUB_K1_859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2Ht7beeX', pubError)
+    // assert.equal(pub.toStringLegacy(), 'EOS859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM', pubError)
+
+    doesNotThrow(function () {
+        return PrivateKey.fromString(pvt.toWif());
+    }, 'converting known wif from string');
+    doesNotThrow(function () {
+        return PrivateKey.fromString(pvt.toString());
+    }, 'converting known pvt from string');
+    doesNotThrow(function () {
+        return PublicKey.fromString(pub.toString());
+    }, 'converting known public key from string');
+    // doesNotThrow(() => PublicKey.fromString(pub.toStringLegacy()), 'converting known public key from string')
+
+    unitTested = true;
+}
+
+/** @private */
+var doesNotThrow = function doesNotThrow(cb, msg) {
+    try {
+        cb();
+    } catch (error) {
+        error.message = msg + ' ==> ' + error.message;
+        throw error;
+    }
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
+
+/***/ }),
+
+/***/ "iZl1":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var assert = __webpack_require__("N+Om"); // from github.com/bitcoinjs/bitcoinjs-lib from github.com/cryptocoinjs/ecdsa
+var crypto = __webpack_require__("DYMz");
+var enforceType = __webpack_require__("FYN1");
+
+var BigInteger = __webpack_require__("QNdi");
+var ECSignature = __webpack_require__("xU1+");
+
+// https://tools.ietf.org/html/rfc6979#section-3.2
+function deterministicGenerateK(curve, hash, d, checkSig, nonce) {
+
+  enforceType('Buffer', hash);
+  enforceType(BigInteger, d);
+
+  if (nonce) {
+    hash = crypto.sha256(Buffer.concat([hash, new Buffer(nonce)]));
+  }
+
+  // sanity check
+  assert.equal(hash.length, 32, 'Hash must be 256 bit');
+
+  var x = d.toBuffer(32);
+  var k = new Buffer(32);
+  var v = new Buffer(32);
+
+  // Step B
+  v.fill(1);
+
+  // Step C
+  k.fill(0);
+
+  // Step D
+  k = crypto.HmacSHA256(Buffer.concat([v, new Buffer([0]), x, hash]), k);
+
+  // Step E
+  v = crypto.HmacSHA256(v, k);
+
+  // Step F
+  k = crypto.HmacSHA256(Buffer.concat([v, new Buffer([1]), x, hash]), k);
+
+  // Step G
+  v = crypto.HmacSHA256(v, k);
+
+  // Step H1/H2a, ignored as tlen === qlen (256 bit)
+  // Step H2b
+  v = crypto.HmacSHA256(v, k);
+
+  var T = BigInteger.fromBuffer(v);
+
+  // Step H3, repeat until T is within the interval [1, n - 1]
+  while (T.signum() <= 0 || T.compareTo(curve.n) >= 0 || !checkSig(T)) {
+    k = crypto.HmacSHA256(Buffer.concat([v, new Buffer([0])]), k);
+    v = crypto.HmacSHA256(v, k);
+
+    // Step H1/H2a, again, ignored as tlen === qlen (256 bit)
+    // Step H2b again
+    v = crypto.HmacSHA256(v, k);
+
+    T = BigInteger.fromBuffer(v);
+  }
+
+  return T;
+}
+
+function sign(curve, hash, d, nonce) {
+
+  var e = BigInteger.fromBuffer(hash);
+  var n = curve.n;
+  var G = curve.G;
+
+  var r, s;
+  var k = deterministicGenerateK(curve, hash, d, function (k) {
+    // find canonically valid signature
+    var Q = G.multiply(k);
+
+    if (curve.isInfinity(Q)) return false;
+
+    r = Q.affineX.mod(n);
+    if (r.signum() === 0) return false;
+
+    s = k.modInverse(n).multiply(e.add(d.multiply(r))).mod(n);
+    if (s.signum() === 0) return false;
+
+    return true;
+  }, nonce);
+
+  var N_OVER_TWO = n.shiftRight(1);
+
+  // enforce low S values, see bip62: 'low s values in signatures'
+  if (s.compareTo(N_OVER_TWO) > 0) {
+    s = n.subtract(s);
+  }
+
+  return ECSignature(r, s);
+}
+
+function verifyRaw(curve, e, signature, Q) {
+  var n = curve.n;
+  var G = curve.G;
+
+  var r = signature.r;
+  var s = signature.s;
+
+  // 1.4.1 Enforce r and s are both integers in the interval [1, n − 1]
+  if (r.signum() <= 0 || r.compareTo(n) >= 0) return false;
+  if (s.signum() <= 0 || s.compareTo(n) >= 0) return false;
+
+  // c = s^-1 mod n
+  var c = s.modInverse(n);
+
+  // 1.4.4 Compute u1 = es^−1 mod n
+  //               u2 = rs^−1 mod n
+  var u1 = e.multiply(c).mod(n);
+  var u2 = r.multiply(c).mod(n);
+
+  // 1.4.5 Compute R = (xR, yR) = u1G + u2Q
+  var R = G.multiplyTwo(u1, Q, u2);
+
+  // 1.4.5 (cont.) Enforce R is not at infinity
+  if (curve.isInfinity(R)) return false;
+
+  // 1.4.6 Convert the field element R.x to an integer
+  var xR = R.affineX;
+
+  // 1.4.7 Set v = xR mod n
+  var v = xR.mod(n);
+
+  // 1.4.8 If v = r, output "valid", and if v != r, output "invalid"
+  return v.equals(r);
+}
+
+function verify(curve, hash, signature, Q) {
+  // 1.4.2 H = Hash(M), already done by the user
+  // 1.4.3 e = H
+  var e = BigInteger.fromBuffer(hash);
+  return verifyRaw(curve, e, signature, Q);
+}
+
+/**
+  * Recover a public key from a signature.
+  *
+  * See SEC 1: Elliptic Curve Cryptography, section 4.1.6, "Public
+  * Key Recovery Operation".
+  *
+  * http://www.secg.org/download/aid-780/sec1-v2.pdf
+  */
+function recoverPubKey(curve, e, signature, i) {
+  assert.strictEqual(i & 3, i, 'Recovery param is more than two bits');
+
+  var n = curve.n;
+  var G = curve.G;
+
+  var r = signature.r;
+  var s = signature.s;
+
+  assert(r.signum() > 0 && r.compareTo(n) < 0, 'Invalid r value');
+  assert(s.signum() > 0 && s.compareTo(n) < 0, 'Invalid s value');
+
+  // A set LSB signifies that the y-coordinate is odd
+  var isYOdd = i & 1;
+
+  // The more significant bit specifies whether we should use the
+  // first or second candidate key.
+  var isSecondKey = i >> 1;
+
+  // 1.1 Let x = r + jn
+  var x = isSecondKey ? r.add(n) : r;
+  var R = curve.pointFromX(isYOdd, x);
+
+  // 1.4 Check that nR is at infinity
+  var nR = R.multiply(n);
+  assert(curve.isInfinity(nR), 'nR is not a valid curve point');
+
+  // Compute -e from e
+  var eNeg = e.negate().mod(n);
+
+  // 1.6.1 Compute Q = r^-1 (sR -  eG)
+  //               Q = r^-1 (sR + -eG)
+  var rInv = r.modInverse(n);
+
+  var Q = R.multiplyTwo(s, G, eNeg).multiply(rInv);
+  curve.validate(Q);
+
+  return Q;
+}
+
+/**
+  * Calculate pubkey extraction parameter.
+  *
+  * When extracting a pubkey from a signature, we have to
+  * distinguish four different cases. Rather than putting this
+  * burden on the verifier, Bitcoin includes a 2-bit value with the
+  * signature.
+  *
+  * This function simply tries all four cases and returns the value
+  * that resulted in a successful pubkey recovery.
+  */
+function calcPubKeyRecoveryParam(curve, e, signature, Q) {
+  for (var i = 0; i < 4; i++) {
+    var Qprime = recoverPubKey(curve, e, signature, i);
+
+    // 1.6.2 Verify Q
+    if (Qprime.equals(Q)) {
+      return i;
+    }
+  }
+
+  throw new Error('Unable to find valid recovery factor');
+}
+
+module.exports = {
+  calcPubKeyRecoveryParam: calcPubKeyRecoveryParam,
+  deterministicGenerateK: deterministicGenerateK,
+  recoverPubKey: recoverPubKey,
+  sign: sign,
+  verify: verify,
+  verifyRaw: verifyRaw
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
 
 /***/ }),
 
@@ -62802,13 +63998,323 @@ module.exports = Object.keys || function keys(O) {
 
 /***/ }),
 
+/***/ "lyzL":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+  Convert a synchronous function into a asynchronous one (via setTimeout)
+  wrapping it in a promise.  This does not expect the function to have a
+  callback paramter.
+
+  @arg {function} func - non-callback function
+
+  @example promiseAsync(myfunction)
+*/
+module.exports = function (func) {
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        try {
+          resolve(func.apply(undefined, args));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+  };
+};
+
+/***/ }),
+
+/***/ "mRCA":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var base58 = __webpack_require__("ZDUk");
+var assert = __webpack_require__("N+Om");
+var randomBytes = __webpack_require__("rOku");
+
+var hash = __webpack_require__("DYMz");
+
+module.exports = {
+    random32ByteBuffer: random32ByteBuffer,
+    addEntropy: addEntropy,
+    cpuEntropy: cpuEntropy,
+    entropyCount: function entropyCount() {
+        return _entropyCount;
+    },
+    checkDecode: checkDecode,
+    checkEncode: checkEncode
+};
+
+var entropyPos = 0,
+    _entropyCount = 0;
+
+var externalEntropyArray = randomBytes(101);
+
+/**
+    Additional forms of entropy are used.  A week random number generator can run out of entropy.  This should ensure even the worst random number implementation will be reasonably safe.
+
+    @arg {number} [cpuEntropyBits = 0] generate entropy on the fly.  This is
+    not required, entropy can be added in advanced via addEntropy or initialize().
+
+    @arg {boolean} [safe = true] false for testing, otherwise this will be
+    true to ensure initialize() was called.
+
+    @return a random buffer obtained from the secure random number generator.  Additional entropy is used.
+*/
+function random32ByteBuffer() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$cpuEntropyBits = _ref.cpuEntropyBits,
+        cpuEntropyBits = _ref$cpuEntropyBits === undefined ? 0 : _ref$cpuEntropyBits,
+        _ref$safe = _ref.safe,
+        safe = _ref$safe === undefined ? true : _ref$safe;
+
+    assert.equal(typeof cpuEntropyBits === 'undefined' ? 'undefined' : _typeof(cpuEntropyBits), 'number', 'cpuEntropyBits');
+    assert.equal(typeof safe === 'undefined' ? 'undefined' : _typeof(safe), 'boolean', 'boolean');
+
+    if (safe) {
+        assert(_entropyCount >= 128, 'Call initialize() to add entropy');
+    }
+
+    // if(entropyCount > 0) {
+    //     console.log(`Additional private key entropy: ${entropyCount} events`)
+    // }
+
+    var hash_array = [];
+    hash_array.push(randomBytes(32));
+    hash_array.push(Buffer.from(cpuEntropy(cpuEntropyBits)));
+    hash_array.push(externalEntropyArray);
+    hash_array.push(browserEntropy());
+    return hash.sha256(Buffer.concat(hash_array));
+}
+
+/**
+    Adds entropy.  This may be called many times while the amount of data saved
+    is accumulatively reduced to 101 integers.  Data is retained in RAM for the
+    life of this module.
+
+    @example React <code>
+    componentDidMount() {
+        this.refs.MyComponent.addEventListener("mousemove", this.onEntropyEvent, {capture: false, passive: true})
+    }
+    componentWillUnmount() {
+        this.refs.MyComponent.removeEventListener("mousemove", this.onEntropyEvent);
+    }
+    onEntropyEvent = (e) => {
+        if(e.type === 'mousemove')
+            key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY)
+        else
+            console.log('onEntropyEvent Unknown', e.type, e)
+    }
+    </code>
+*/
+function addEntropy() {
+    assert.equal(externalEntropyArray.length, 101, 'externalEntropyArray');
+
+    for (var _len = arguments.length, ints = Array(_len), _key = 0; _key < _len; _key++) {
+        ints[_key] = arguments[_key];
+    }
+
+    _entropyCount += ints.length;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = ints[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var i = _step.value;
+
+            var pos = entropyPos++ % 101;
+            var i2 = externalEntropyArray[pos] += i;
+            if (i2 > 9007199254740991) externalEntropyArray[pos] = 0;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+}
+
+/**
+    This runs in just under 1 second and ensures a minimum of cpuEntropyBits
+    bits of entropy are gathered.
+
+    Based on more-entropy. @see https://github.com/keybase/more-entropy/blob/master/src/generator.iced
+
+    @arg {number} [cpuEntropyBits = 128]
+    @return {array} counts gathered by measuring variations in the CPU speed during floating point operations.
+*/
+function cpuEntropy() {
+    var cpuEntropyBits = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 128;
+
+    var collected = [];
+    var lastCount = null;
+    var lowEntropySamples = 0;
+    while (collected.length < cpuEntropyBits) {
+        var count = floatingPointCount();
+        if (lastCount != null) {
+            var delta = count - lastCount;
+            if (Math.abs(delta) < 1) {
+                lowEntropySamples++;
+                continue;
+            }
+            // how many bits of entropy were in this sample
+            var bits = Math.floor(log2(Math.abs(delta)) + 1);
+            if (bits < 4) {
+                if (bits < 2) {
+                    lowEntropySamples++;
+                }
+                continue;
+            }
+            collected.push(delta);
+        }
+        lastCount = count;
+    }
+    if (lowEntropySamples > 10) {
+        var pct = Number(lowEntropySamples / cpuEntropyBits * 100).toFixed(2);
+        // Is this algorithm getting inefficient?
+        console.warn('WARN: ' + pct + '% low CPU entropy re-sampled');
+    }
+    return collected;
+}
+
+/**
+    @private
+    Count while performing floating point operations during a fixed time
+    (7 ms for example).  Using a fixed time makes this algorithm
+    predictable in runtime.
+*/
+function floatingPointCount() {
+    var workMinMs = 7;
+    var d = Date.now();
+    var i = 0,
+        x = 0;
+    while (Date.now() < d + workMinMs + 1) {
+        x = Math.sin(Math.sqrt(Math.log(++i + x)));
+    }
+    return i;
+}
+
+var log2 = function log2(x) {
+    return Math.log(x) / Math.LN2;
+};
+
+/**
+    @private
+    Attempt to gather and hash information from the browser's window, history, and supported mime types.  For non-browser environments this simply includes secure random data.  In any event, the information is re-hashed in a loop for 25 milliseconds seconds.
+
+    @return {Buffer} 32 bytes
+*/
+function browserEntropy() {
+    var entropyStr = Array(randomBytes(101)).join();
+    try {
+        entropyStr += new Date().toString() + " " + window.screen.height + " " + window.screen.width + " " + window.screen.colorDepth + " " + " " + window.screen.availHeight + " " + window.screen.availWidth + " " + window.screen.pixelDepth + navigator.language + " " + window.location + " " + window.history.length;
+
+        for (var i = 0, mimeType; i < navigator.mimeTypes.length; i++) {
+            mimeType = navigator.mimeTypes[i];
+            entropyStr += mimeType.description + " " + mimeType.type + " " + mimeType.suffixes + " ";
+        }
+    } catch (error) {
+        //nodejs:ReferenceError: window is not defined
+        entropyStr += hash.sha256(new Date().toString());
+    }
+
+    var b = new Buffer(entropyStr);
+    entropyStr += b.toString('binary') + " " + new Date().toString();
+
+    var entropy = entropyStr;
+    var start_t = Date.now();
+    while (Date.now() - start_t < 25) {
+        entropy = hash.sha256(entropy);
+    }return entropy;
+}
+
+/**
+  @arg {Buffer} keyBuffer data
+  @arg {string} keyType = sha256x2, K1, etc
+  @return {string} checksum encoded base58 string
+*/
+function checkEncode(keyBuffer) {
+    var keyType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    assert(Buffer.isBuffer(keyBuffer), 'expecting keyBuffer<Buffer>');
+    if (keyType === 'sha256x2') {
+        // legacy
+        var checksum = hash.sha256(hash.sha256(keyBuffer)).slice(0, 4);
+        return base58.encode(Buffer.concat([keyBuffer, checksum]));
+    } else {
+        var check = [keyBuffer];
+        if (keyType) {
+            check.push(Buffer.from(keyType));
+        }
+        var _checksum = hash.ripemd160(Buffer.concat(check)).slice(0, 4);
+        return base58.encode(Buffer.concat([keyBuffer, _checksum]));
+    }
+}
+
+/**
+  @arg {Buffer} keyString data
+  @arg {string} keyType = sha256x2, K1, etc
+  @return {string} checksum encoded base58 string
+*/
+function checkDecode(keyString) {
+    var keyType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    assert(keyString != null, 'private key expected');
+    var buffer = new Buffer(base58.decode(keyString));
+    var checksum = buffer.slice(-4);
+    var key = buffer.slice(0, -4);
+
+    var newCheck = void 0;
+    if (keyType === 'sha256x2') {
+        // legacy
+        newCheck = hash.sha256(hash.sha256(key)).slice(0, 4); // WIF (legacy)
+    } else {
+        var check = [key];
+        if (keyType) {
+            check.push(Buffer.from(keyType));
+        }
+        newCheck = hash.ripemd160(Buffer.concat(check)).slice(0, 4); //PVT
+    }
+
+    if (checksum.toString() !== newCheck.toString()) {
+        throw new Error('Invalid checksum, ' + (checksum.toString('hex') + ' != ' + newCheck.toString('hex')));
+    }
+
+    return key;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
+
+/***/ }),
+
 /***/ "mUHv":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var schema = Object.assign({}, __webpack_require__("cB4U"));
+var schema = Object.assign({}, __webpack_require__("cB4U"), __webpack_require__("Pp2f"), __webpack_require__("WrX4"));
 
 module.exports = schema;
 
@@ -63205,6 +64711,300 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 /***/ }),
 
+/***/ "n0ja":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var ecdsa = __webpack_require__("iZl1");
+var hash = __webpack_require__("DYMz");
+var curve = __webpack_require__("3btT").getCurveByName('secp256k1');
+var assert = __webpack_require__("N+Om");
+var BigInteger = __webpack_require__("QNdi");
+var keyUtils = __webpack_require__("mRCA");
+var PublicKey = __webpack_require__("2fkC");
+var PrivateKey = __webpack_require__("iP86");
+
+module.exports = Signature;
+
+function Signature(r, s, i) {
+    assert.equal(r != null, true, 'Missing parameter');
+    assert.equal(s != null, true, 'Missing parameter');
+    assert.equal(i != null, true, 'Missing parameter');
+
+    /**
+        Verify signed data.
+         @arg {String|Buffer} data - full data
+        @arg {pubkey|PublicKey} pubkey - EOSKey..
+        @arg {String} [encoding = 'utf8'] - data encoding (if data is a string)
+         @return {boolean}
+    */
+    function verify(data, pubkey) {
+        var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'utf8';
+
+        if (typeof data === 'string') {
+            data = Buffer.from(data, encoding);
+        }
+        assert(Buffer.isBuffer(data), 'data is a required String or Buffer');
+        data = hash.sha256(data);
+        return verifyHash(data, pubkey);
+    }
+
+    /**
+        Verify a buffer of exactally 32 bytes in size (sha256(text))
+         @arg {String|Buffer} dataSha256 - 32 byte buffer or string
+        @arg {String|PublicKey} pubkey - EOSKey..
+        @arg {String} [encoding = 'hex'] - dataSha256 encoding (if string)
+         @return {boolean}
+    */
+    function verifyHash(dataSha256, pubkey) {
+        var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'hex';
+
+        if (typeof dataSha256 === 'string') {
+            dataSha256 = Buffer.from(dataSha256, encoding);
+        }
+        if (dataSha256.length !== 32 || !Buffer.isBuffer(dataSha256)) throw new Error("dataSha256: 32 bytes required");
+
+        var publicKey = PublicKey(pubkey);
+        assert(publicKey, 'pubkey required');
+
+        return ecdsa.verify(curve, dataSha256, { r: r, s: s }, publicKey.Q);
+    };
+
+    /** @deprecated
+         Verify hex data by converting to a buffer then hashing.
+         @return {boolean}
+    */
+    function verifyHex(hex, pubkey) {
+        console.log('Deprecated: use verify(data, pubkey, "hex")');
+
+        var buf = Buffer.from(hex, 'hex');
+        return verify(buf, pubkey);
+    };
+
+    /**
+        Recover the public key used to create this signature using full data.
+         @arg {String|Buffer} data - full data
+        @arg {String} [encoding = 'utf8'] - data encoding (if string)
+         @return {PublicKey}
+    */
+    function recover(data) {
+        var encoding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'utf8';
+
+        if (typeof data === 'string') {
+            data = Buffer.from(data, encoding);
+        }
+        assert(Buffer.isBuffer(data), 'data is a required String or Buffer');
+        data = hash.sha256(data);
+
+        return recoverHash(data);
+    };
+
+    /**
+        @arg {String|Buffer} dataSha256 - sha256 hash 32 byte buffer or hex string
+        @arg {String} [encoding = 'hex'] - dataSha256 encoding (if string)
+         @return {PublicKey}
+    */
+    function recoverHash(dataSha256) {
+        var encoding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'hex';
+
+        if (typeof dataSha256 === 'string') {
+            dataSha256 = Buffer.from(dataSha256, encoding);
+        }
+        if (dataSha256.length !== 32 || !Buffer.isBuffer(dataSha256)) {
+            throw new Error("dataSha256: 32 byte String or buffer requred");
+        }
+
+        var e = BigInteger.fromBuffer(dataSha256);
+        var i2 = i;
+        i2 -= 27;
+        i2 = i2 & 3;
+        var Q = ecdsa.recoverPubKey(curve, e, { r: r, s: s, i: i }, i2);
+        return PublicKey.fromPoint(Q);
+    };
+
+    function toBuffer() {
+        var buf;
+        buf = new Buffer(65);
+        buf.writeUInt8(i, 0);
+        r.toBuffer(32).copy(buf, 1);
+        s.toBuffer(32).copy(buf, 33);
+        return buf;
+    };
+
+    function toHex() {
+        return toBuffer().toString("hex");
+    };
+
+    var signatureCache = void 0;
+
+    function toString() {
+        if (signatureCache) {
+            return signatureCache;
+        }
+        signatureCache = 'SIG_K1_' + keyUtils.checkEncode(toBuffer(), 'K1');
+        return signatureCache;
+    }
+
+    return {
+        r: r, s: s, i: i,
+        toBuffer: toBuffer,
+        verify: verify,
+        verifyHash: verifyHash,
+        verifyHex: verifyHex, // deprecated
+        recover: recover,
+        recoverHash: recoverHash,
+        toHex: toHex,
+        toString: toString,
+
+        /** @deprecated use verify (same arguments and return) */
+        verifyBuffer: function verifyBuffer() {
+            console.log('Deprecated: use signature.verify instead (same arguments)');
+            return verify.apply(undefined, arguments);
+        },
+
+        /** @deprecated use recover (same arguments and return) */
+        recoverPublicKey: function recoverPublicKey() {
+            console.log('Deprecated: use signature.recover instead (same arguments)');
+            return recover.apply(undefined, arguments);
+        },
+
+        /** @deprecated use recoverHash (same arguments and return) */
+        recoverPublicKeyFromBuffer: function recoverPublicKeyFromBuffer() {
+            console.log('Deprecated: use signature.recoverHash instead (same arguments)');
+            return recoverHash.apply(undefined, arguments);
+        }
+    };
+}
+
+/**
+    Hash and sign arbitrary data.
+
+    @arg {string|Buffer} data - full data
+    @arg {wif|PrivateKey} privateKey
+    @arg {String} [encoding = 'utf8'] - data encoding (if string)
+
+    @return {Signature}
+*/
+Signature.sign = function (data, privateKey) {
+    var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'utf8';
+
+    if (typeof data === 'string') {
+        data = Buffer.from(data, encoding);
+    }
+    assert(Buffer.isBuffer(data), 'data is a required String or Buffer');
+    data = hash.sha256(data);
+    return Signature.signHash(data, privateKey);
+};
+
+/**
+    Sign a buffer of exactally 32 bytes in size (sha256(text))
+
+    @arg {string|Buffer} dataSha256 - 32 byte buffer or string
+    @arg {wif|PrivateKey} privateKey
+    @arg {String} [encoding = 'hex'] - dataSha256 encoding (if string)
+
+    @return {Signature}
+*/
+Signature.signHash = function (dataSha256, privateKey) {
+    var encoding = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'hex';
+
+    if (typeof dataSha256 === 'string') {
+        dataSha256 = Buffer.from(dataSha256, encoding);
+    }
+    if (dataSha256.length !== 32 || !Buffer.isBuffer(dataSha256)) throw new Error("dataSha256: 32 byte buffer requred");
+
+    privateKey = PrivateKey(privateKey);
+    assert(privateKey, 'privateKey required');
+
+    var der, e, ecsignature, i, lenR, lenS, nonce;
+    i = null;
+    nonce = 0;
+    e = BigInteger.fromBuffer(dataSha256);
+    while (true) {
+        ecsignature = ecdsa.sign(curve, dataSha256, privateKey.d, nonce++);
+        der = ecsignature.toDER();
+        lenR = der[3];
+        lenS = der[5 + lenR];
+        if (lenR === 32 && lenS === 32) {
+            i = ecdsa.calcPubKeyRecoveryParam(curve, e, ecsignature, privateKey.toPublic().Q);
+            i += 4; // compressed
+            i += 27; // compact  //  24 or 27 :( forcing odd-y 2nd key candidate)
+            break;
+        }
+        if (nonce % 10 === 0) {
+            console.log("WARN: " + nonce + " attempts to find canonical signature");
+        }
+    }
+    return Signature(ecsignature.r, ecsignature.s, i);
+};
+
+Signature.fromBuffer = function (buf) {
+    var i, r, s;
+    assert(Buffer.isBuffer(buf), 'Buffer is required');
+    assert.equal(buf.length, 65, 'Invalid signature length');
+    i = buf.readUInt8(0);
+    assert.equal(i - 27, i - 27 & 7, 'Invalid signature parameter');
+    r = BigInteger.fromBuffer(buf.slice(1, 33));
+    s = BigInteger.fromBuffer(buf.slice(33));
+    return Signature(r, s, i);
+};
+
+Signature.fromHex = function (hex) {
+    return Signature.fromBuffer(Buffer.from(hex, "hex"));
+};
+
+/**
+    @arg {string} signature - like SIG_K1_base58signature..
+    @return {Signature} or `null` (invalid)
+*/
+Signature.fromString = function (signature) {
+    try {
+        return Signature.fromStringOrThrow(signature);
+    } catch (e) {
+        return null;
+    }
+};
+
+/**
+    @arg {string} signature - like SIG_K1_base58signature..
+    @throws {Error} invalid
+    @return {Signature}
+*/
+Signature.fromStringOrThrow = function (signature) {
+    assert.equal(typeof signature === 'undefined' ? 'undefined' : _typeof(signature), 'string', 'signature');
+    var match = signature.match(/^SIG_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/);
+    assert(match != null && match.length === 3, 'Expecting signature like: SIG_K1_base58signature..');
+
+    var _match = _slicedToArray(match, 3),
+        keyType = _match[1],
+        keyString = _match[2];
+
+    assert.equal(keyType, 'K1', 'K1 signature expected');
+    return Signature.fromBuffer(keyUtils.checkDecode(keyString, keyType));
+};
+
+/**
+    @arg {String|Signature} o - hex string
+    @return {Signature}
+*/
+Signature.from = function (o) {
+    var signature = o ? o.r && o.s && o.i ? o : typeof o === 'string' && o.length === 130 ? Signature.fromHex(o) : typeof o === 'string' && o.length !== 130 ? Signature.fromStringOrThrow(o) : Buffer.isBuffer(o) ? Signature.fromBuffer(o) : null : o; /*null or undefined*/
+
+    if (!signature) {
+        throw new TypeError('signature should be a hex string or buffer');
+    }
+    return signature;
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
+
+/***/ }),
+
 /***/ "n2Pf":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -63337,9 +65137,6 @@ var types = {
     return [intbuf, { signed: true, bits: 32, variable: true }];
   },
 
-  float32: function float32() {
-    return [float, { bits: 32 }];
-  },
   float64: function float64() {
     return [float, { bits: 64 }];
   }
@@ -63849,10 +65646,6 @@ var bytebuf = function bytebuf(validation) {
     fromObject: function fromObject(value) {
       if (typeof value === 'string') {
         value = Buffer.from(value, 'hex');
-      } else if (value instanceof Array) {
-        value = Buffer.from(value);
-      } else if (value instanceof Uint8Array) {
-        value = Buffer.from(value);
       }
 
       validate(value, validation);
@@ -64886,20 +66679,6 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 
 /***/ }),
 
-/***/ "piQa":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("NjRr");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("rjj0")("ee5752fe", content, true, {});
-
-/***/ }),
-
 /***/ "pxG4":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -65215,7 +66994,7 @@ var _typeof3 = _interopRequireDefault(_typeof2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ecc = __webpack_require__("Dfrr");
+var ecc = __webpack_require__("u+wb");
 var Fcbuffer = __webpack_require__("3FNs");
 var EosApi = __webpack_require__("AcGK");
 var assert = __webpack_require__("N+Om");
@@ -65225,10 +67004,6 @@ var AbiCache = __webpack_require__("DYnR");
 var writeApiGen = __webpack_require__("/48E");
 var format = __webpack_require__("JNUY");
 var schema = __webpack_require__("mUHv");
-
-var token = __webpack_require__("U+8V");
-var system = __webpack_require__("NoFI");
-var eosio_null = __webpack_require__("OPeQ");
 
 var Eos = function Eos() {
   var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -65263,6 +67038,7 @@ var Eos = function Eos() {
 
   applyDefaults(config, configDefaults);
   applyDefaults(config.logger, configDefaults.logger);
+
   return createEos(config);
 };
 
@@ -65298,11 +67074,7 @@ function createEos(config) {
   var network = config.httpEndpoint != null ? EosApi(config) : null;
   config.network = network;
 
-  var abis = [];
   var abiCache = AbiCache(network, config);
-  abis.push(abiCache.abi('eosio.null', eosio_null));
-  abis.push(abiCache.abi('eosio.token', token));
-  abis.push(abiCache.abi('eosio', system));
 
   if (!config.chainId) {
     config.chainId = 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f';
@@ -65328,7 +67100,7 @@ function createEos(config) {
       fromBuffer = _Structs.fromBuffer,
       toBuffer = _Structs.toBuffer;
 
-  var eos = mergeWriteFunctions(config, EosApi, structs, abis);
+  var eos = mergeWriteFunctions(config, EosApi, structs);
 
   Object.assign(eos, {
     config: safeConfig(config),
@@ -65359,7 +67131,7 @@ function createEos(config) {
 */
 function safeConfig(config) {
   // access control is shallow references only
-  var readOnly = new Set(['httpEndpoint', 'abiCache', 'chainId', 'expireInSeconds']);
+  var readOnly = new Set(['httpEndpoint', 'abiCache']);
   var readWrite = new Set(['verbose', 'debug', 'broadcast', 'logger', 'sign']);
   var protectedConfig = {};
 
@@ -65393,13 +67165,13 @@ function safeConfig(config) {
   @return {object} - read and write method calls (create and sign transactions)
   @throw {TypeError} if a funciton name conflicts
 */
-function mergeWriteFunctions(config, EosApi, structs, abis) {
+function mergeWriteFunctions(config, EosApi, structs) {
   var network = config.network;
 
 
   var merge = Object.assign({}, network);
 
-  var writeApi = writeApiGen(EosApi, network, structs, config, abis);
+  var writeApi = writeApiGen(EosApi, network, structs, config, schema);
   throwOnDuplicate(merge, writeApi, 'Conflicting methods in EosApi and Transaction Api');
   Object.assign(merge, writeApi);
 
@@ -65426,8 +67198,7 @@ var defaultSignProvider = function defaultSignProvider(eos, config) {
   return function _callee(_ref) {
     var sign = _ref.sign,
         buf = _ref.buf,
-        transaction = _ref.transaction,
-        optionsKeyProvider = _ref.optionsKeyProvider;
+        transaction = _ref.transaction;
 
     var keyProvider, keys, pvt, sigs, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, key, keyMap, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _key, isPrivate, isPublic, pubkeys;
 
@@ -65435,15 +67206,14 @@ var defaultSignProvider = function defaultSignProvider(eos, config) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            // optionsKeyProvider is a per-action key: await eos.someAction('user2' .., {keyProvider: privateKey2})
-            keyProvider = optionsKeyProvider ? optionsKeyProvider : config.keyProvider;
+            keyProvider = config.keyProvider;
 
             if (keyProvider) {
               _context.next = 3;
               break;
             }
 
-            throw new TypeError('This transaction requires a keyProvider for signing');
+            throw new TypeError('This transaction requires a config.keyProvider for signing');
 
           case 3:
             keys = keyProvider;
@@ -66482,7 +68252,7 @@ var _typeof3 = _interopRequireDefault(_typeof2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _require = __webpack_require__("Dfrr"),
+var _require = __webpack_require__("u+wb"),
     Signature = _require.Signature,
     PublicKey = _require.PublicKey;
 
@@ -66490,7 +68260,7 @@ var Fcbuffer = __webpack_require__("3FNs");
 var ByteBuffer = __webpack_require__("islT");
 var assert = __webpack_require__("N+Om");
 
-var schema = __webpack_require__("mUHv");
+var json = { schema: __webpack_require__("mUHv") };
 
 var _require2 = __webpack_require__("JNUY"),
     isName = _require2.isName,
@@ -66510,26 +68280,33 @@ module.exports = function () {
   var extendedSchema = arguments[1];
 
   var structLookup = function structLookup(lookupName, account) {
-    var cache = config.abiCache.abi(account);
-
-    // Lookup by ABI action "name"
+    var cachedCode = new Set(['eosio', 'eosio.token', 'eosio.null']);
+    if (cachedCode.has(account)) {
+      return structs[lookupName];
+    }
+    var abi = config.abiCache.abi(account);
+    var struct = abi.structs[lookupName];
+    if (struct != null) {
+      return struct;
+    }
+    // TODO: move up (before `const struct = abi.structs[lookupName]`)
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = cache.abi.actions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (var _iterator = abi.abi.actions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var action = _step.value;
+        var name = action.name,
+            type = action.type;
 
-        if (action.name === lookupName) {
-          var _struct = cache.structs[action.type];
+        if (name === lookupName) {
+          var _struct = abi.structs[type];
           if (_struct != null) {
             return _struct;
           }
         }
       }
-
-      // Lookup struct by "type"
     } catch (err) {
       _didIteratorError = true;
       _iteratorError = err;
@@ -66545,12 +68322,7 @@ module.exports = function () {
       }
     }
 
-    var struct = cache.structs[lookupName];
-    if (struct != null) {
-      return struct;
-    }
-
-    throw new Error('Missing ABI action: ' + lookupName);
+    throw new Error('Missing ABI struct or action: ' + lookupName);
   };
 
   // If nodeos does not have an ABI setup for a certain action.type, it will throw
@@ -66558,7 +68330,7 @@ module.exports = function () {
   // may be used to until native ABI is added or fixed.
   var forceActionDataHex = config.forceActionDataHex != null ? config.forceActionDataHex : true;
 
-  var override = Object.assign({}, authorityOverride(config), abiOverride(structLookup), wasmCodeOverride(config), actionDataOverride(structLookup, forceActionDataHex), config.override);
+  var override = Object.assign({}, authorityOverride, abiOverride(structLookup), wasmCodeOverride(config), actionDataOverride(structLookup, forceActionDataHex), config.override);
 
   var eosTypes = {
     name: function name() {
@@ -66600,9 +68372,9 @@ module.exports = function () {
   config.sort['authority.accounts'] = true;
   config.sort['authority.keys'] = true;
 
-  var fullSchema = Object.assign({}, schema, extendedSchema);
+  var schema = Object.assign({}, json.schema, extendedSchema);
 
-  var _Fcbuffer = Fcbuffer(fullSchema, config),
+  var _Fcbuffer = Fcbuffer(schema, config),
       structs = _Fcbuffer.structs,
       types = _Fcbuffer.types,
       errors = _Fcbuffer.errors,
@@ -66695,13 +68467,13 @@ var PublicKeyEcc = function PublicKeyEcc(validation) {
       var bcopy = b.copy(b.offset, b.offset + 33);
       b.skip(33);
       var pubbuf = Buffer.from(bcopy.toBinary(), 'binary');
-      return PublicKey.fromBuffer(pubbuf).toString(validation.keyPrefix);
+      return PublicKey.fromBuffer(pubbuf).toString();
     },
     appendByteBuffer: function appendByteBuffer(b, value) {
       // if(validation.debug) {
       //   console.error(`${value}`, 'PublicKeyType.appendByteBuffer')
       // }
-      var buf = PublicKey.fromStringOrThrow(value, validation.keyPrefix).toBuffer();
+      var buf = PublicKey.fromStringOrThrow(value).toBuffer();
       b.append(buf.toString('binary'), 'binary');
     },
     fromObject: function fromObject(value) {
@@ -66709,8 +68481,7 @@ var PublicKeyEcc = function PublicKeyEcc(validation) {
     },
     toObject: function toObject(value) {
       if (validation.defaults && value == null) {
-        var keyPrefix = validation.keyPrefix ? validation.keyPrefix : 'EOS';
-        return keyPrefix + '6MRy..';
+        return 'EOS6MRy..';
       }
       return value;
     }
@@ -67071,47 +68842,45 @@ var SignatureType = function SignatureType(validation, baseTypes) {
   };
 };
 
-var authorityOverride = function authorityOverride(config) {
-  return {
-    /** shorthand `EOS6MRyAj..` */
-    'authority.fromObject': function authorityFromObject(value) {
-      if (PublicKey.fromString(value, config.keyPrefix)) {
-        return {
-          threshold: 1,
-          keys: [{ key: value, weight: 1 }]
-        };
-      }
-      if (typeof value === 'string') {
-        var _value$split3 = value.split('@'),
-            _value$split4 = (0, _slicedToArray3.default)(_value$split3, 2),
-            account = _value$split4[0],
-            _value$split4$ = _value$split4[1],
-            permission = _value$split4$ === undefined ? 'active' : _value$split4$;
-
-        return {
-          threshold: 1,
-          accounts: [{
-            permission: {
-              actor: account,
-              permission: permission
-            },
-            weight: 1
-          }]
-        };
-      }
+var authorityOverride = {
+  /** shorthand `EOS6MRyAj..` */
+  'authority.fromObject': function authorityFromObject(value) {
+    if (PublicKey.fromString(value)) {
+      return {
+        threshold: 1,
+        keys: [{ key: value, weight: 1 }]
+      };
     }
-  };
+    if (typeof value === 'string') {
+      var _value$split3 = value.split('@'),
+          _value$split4 = (0, _slicedToArray3.default)(_value$split3, 2),
+          account = _value$split4[0],
+          _value$split4$ = _value$split4[1],
+          permission = _value$split4$ === undefined ? 'active' : _value$split4$;
+
+      return {
+        threshold: 1,
+        accounts: [{
+          permission: {
+            actor: account,
+            permission: permission
+          },
+          weight: 1
+        }]
+      };
+    }
+  }
 };
 
 var abiOverride = function abiOverride(structLookup) {
   return {
     'abi_def.fromObject': function abi_defFromObject(value) {
       if (typeof value === 'string') {
-        var json = Buffer.from(value, 'hex').toString();
-        if (json.length === 0) {
-          json = Buffer.from(value).toString();
+        var _json = Buffer.from(value, 'hex').toString();
+        if (_json.length === 0) {
+          _json = Buffer.from(value).toString();
         }
-        return JSON.parse(json);
+        return JSON.parse(_json);
       }
       if (Buffer.isBuffer(value)) {
         return JSON.parse(value.toString());
@@ -67204,7 +68973,7 @@ var actionDataOverride = function actionDataOverride(structLookup, forceActionDa
         b.append(b2.copy(0, b2.offset), 'binary');
       } else {
         // console.log(`Unknown Action.name ${object.name}`)
-        var data = typeof object.data === 'string' ? Buffer.from(object.data, 'hex') : object.data;
+        var data = typeof object.data === 'string' ? new Buffer(object.data, 'hex') : object.data;
         if (!Buffer.isBuffer(data)) {
           throw new TypeError('Unknown struct \'' + object.name + '\' for contract \'' + object.account + '\', locate this struct or provide serialized action.data');
         }
@@ -67225,7 +68994,7 @@ var actionDataOverride = function actionDataOverride(structLookup, forceActionDa
         if ((typeof data === 'undefined' ? 'undefined' : (0, _typeof3.default)(data)) === 'object') {
           result.data = ser.fromObject(data); // resolve shorthand
         } else if (typeof data === 'string') {
-          var buf = Buffer.from(data, 'hex');
+          var buf = new Buffer(data, 'hex');
           result.data = Fcbuffer.fromBuffer(ser, buf);
         } else {
           throw new TypeError('Expecting hex string or object in action.data');
@@ -68298,6 +70067,21 @@ module.exports = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "u+wb":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var commonApi = __webpack_require__("I93p");
+var objectApi = __webpack_require__("B7Bh");
+
+var ecc = Object.assign({}, commonApi, objectApi);
+
+module.exports = ecc;
 
 /***/ }),
 
@@ -70255,6 +72039,21 @@ function isUndefined(arg) {
 
 /***/ }),
 
+/***/ "wEdB":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("FZ+f")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".verification[data-v-5ffabb78]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-5ffabb78]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-5ffabb78]{font-size:20px;color:#666}.verification .content[data-v-5ffabb78]{padding:30px 0;font-size:24px}.verification .content .line[data-v-5ffabb78]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-5ffabb78]{display:inline-block;width:18%}.verification .content .line span[data-v-5ffabb78]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-5ffabb78]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-5ffabb78]{width:.6rem}.verification .content .btn[data-v-5ffabb78]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "woOf":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -70484,6 +72283,140 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
+
+/***/ }),
+
+/***/ "xU1+":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Buffer) {
+
+var assert = __webpack_require__("N+Om"); // from https://github.com/bitcoinjs/bitcoinjs-lib
+var enforceType = __webpack_require__("FYN1");
+
+var BigInteger = __webpack_require__("QNdi");
+
+function ECSignature(r, s) {
+  enforceType(BigInteger, r);
+  enforceType(BigInteger, s);
+
+  function toCompact(i, compressed) {
+    if (compressed) i += 4;
+    i += 27;
+
+    var buffer = new Buffer(65);
+    buffer.writeUInt8(i, 0);
+
+    r.toBuffer(32).copy(buffer, 1);
+    s.toBuffer(32).copy(buffer, 33);
+
+    return buffer;
+  }
+
+  function toDER() {
+    var rBa = r.toDERInteger();
+    var sBa = s.toDERInteger();
+
+    var sequence = [];
+
+    // INTEGER
+    sequence.push(0x02, rBa.length);
+    sequence = sequence.concat(rBa);
+
+    // INTEGER
+    sequence.push(0x02, sBa.length);
+    sequence = sequence.concat(sBa);
+
+    // SEQUENCE
+    sequence.unshift(0x30, sequence.length);
+
+    return new Buffer(sequence);
+  }
+
+  function toScriptSignature(hashType) {
+    var hashTypeBuffer = new Buffer(1);
+    hashTypeBuffer.writeUInt8(hashType, 0);
+
+    return Buffer.concat([toDER(), hashTypeBuffer]);
+  }
+
+  return { r: r, s: s, toCompact: toCompact, toDER: toDER, toScriptSignature: toScriptSignature };
+}
+
+// Import operations
+ECSignature.parseCompact = function (buffer) {
+  assert.equal(buffer.length, 65, 'Invalid signature length');
+  var i = buffer.readUInt8(0) - 27;
+
+  // At most 3 bits
+  assert.equal(i, i & 7, 'Invalid signature parameter');
+  var compressed = !!(i & 4);
+
+  // Recovery param only
+  i = i & 3;
+
+  var r = BigInteger.fromBuffer(buffer.slice(1, 33));
+  var s = BigInteger.fromBuffer(buffer.slice(33));
+
+  return {
+    compressed: compressed,
+    i: i,
+    signature: ECSignature(r, s)
+  };
+};
+
+ECSignature.fromDER = function (buffer) {
+  assert.equal(buffer.readUInt8(0), 0x30, 'Not a DER sequence');
+  assert.equal(buffer.readUInt8(1), buffer.length - 2, 'Invalid sequence length');
+  assert.equal(buffer.readUInt8(2), 0x02, 'Expected a DER integer');
+
+  var rLen = buffer.readUInt8(3);
+  assert(rLen > 0, 'R length is zero');
+
+  var offset = 4 + rLen;
+  assert.equal(buffer.readUInt8(offset), 0x02, 'Expected a DER integer (2)');
+
+  var sLen = buffer.readUInt8(offset + 1);
+  assert(sLen > 0, 'S length is zero');
+
+  var rB = buffer.slice(4, offset);
+  var sB = buffer.slice(offset + 2);
+  offset += 2 + sLen;
+
+  if (rLen > 1 && rB.readUInt8(0) === 0x00) {
+    assert(rB.readUInt8(1) & 0x80, 'R value excessively padded');
+  }
+
+  if (sLen > 1 && sB.readUInt8(0) === 0x00) {
+    assert(sB.readUInt8(1) & 0x80, 'S value excessively padded');
+  }
+
+  assert.equal(offset, buffer.length, 'Invalid DER encoding');
+  var r = BigInteger.fromDERInteger(rB);
+  var s = BigInteger.fromDERInteger(sB);
+
+  assert(r.signum() >= 0, 'R value is negative');
+  assert(s.signum() >= 0, 'S value is negative');
+
+  return ECSignature(r, s);
+};
+
+// FIXME: 0x00, 0x04, 0x80 are SIGHASH_* boundary constants, importing Transaction causes a circular dependency
+ECSignature.parseScriptSignature = function (buffer) {
+  var hashType = buffer.readUInt8(buffer.length - 1);
+  var hashTypeMod = hashType & ~0x80;
+
+  assert(hashTypeMod > 0x00 && hashTypeMod < 0x04, 'Invalid hashType');
+
+  return {
+    signature: ECSignature.fromDER(buffer.slice(0, -1)),
+    hashType: hashType
+  };
+};
+
+module.exports = ECSignature;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
 
 /***/ }),
 
@@ -104709,4 +106642,4 @@ module.exports = Sha256
 /***/ })
 
 },["NHnr"]);
-//# sourceMappingURL=app.8efedaa013718907dd3f.js.map
+//# sourceMappingURL=app.a7cc58f6d042600cfb14.js.map
