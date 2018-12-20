@@ -3891,6 +3891,20 @@ module.exports = __webpack_require__("FeBl").getIteratorMethod = function (it) {
 
 /***/ }),
 
+/***/ "3pi9":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("FAt6");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("rjj0")("264e7be6", content, true, {});
+
+/***/ }),
+
 /***/ "4/4u":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32176,6 +32190,21 @@ function isnan (val) {
 
 /***/ }),
 
+/***/ "FAt6":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("FZ+f")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".verification[data-v-31f427f4]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-31f427f4]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-31f427f4]{font-size:20px;color:#666}.verification .content[data-v-31f427f4]{padding:30px 0;font-size:24px}.verification .content .line[data-v-31f427f4]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-31f427f4]{display:inline-block;width:18%}.verification .content .line span[data-v-31f427f4]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-31f427f4]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-31f427f4]{width:.6rem}.verification .content .btn[data-v-31f427f4]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "FYN1":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34742,21 +34771,6 @@ exports.sha224 = __webpack_require__("lXn8")
 exports.sha256 = __webpack_require__("zvjZ")
 exports.sha384 = __webpack_require__("aY2F")
 exports.sha512 = __webpack_require__("C015")
-
-
-/***/ }),
-
-/***/ "JpsG":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("FZ+f")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".verification[data-v-5e4fcf22]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-5e4fcf22]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-5e4fcf22]{font-size:20px;color:#666}.verification .content[data-v-5e4fcf22]{padding:30px 0;font-size:24px}.verification .content .line[data-v-5e4fcf22]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-5e4fcf22]{display:inline-block;width:18%}.verification .content .line span[data-v-5e4fcf22]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-5e4fcf22]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-5e4fcf22]{width:.6rem}.verification .content .btn[data-v-5e4fcf22]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}", ""]);
-
-// exports
 
 
 /***/ }),
@@ -38774,6 +38788,9 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
     formatTime: function formatTime(unixTimestamp) {
       unixTimestamp = new Date(unixTimestamp * 1000);
       var commonTime = unixTimestamp.toLocaleString();
+      if (commonTime.indexOf("上午", "") > -1) {
+        return commonTime.replace("上午", '');
+      }
       return commonTime.replace("下午", '');
     }
   }
@@ -38983,18 +39000,21 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
     formatTime: function formatTime(unixTimestamp) {
       unixTimestamp = new Date(unixTimestamp * 1000);
       var commonTime = unixTimestamp.toLocaleString();
+      if (commonTime.indexOf("上午", "") > -1) {
+        return commonTime.replace("上午", '');
+      }
       return commonTime.replace("下午", '');
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-5e4fcf22","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-31f427f4","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
 var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[_vm._m(0),_vm._v(" "),(_vm.verData)?_c('div',{staticClass:"content"},[(!_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("user_name:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[0]))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("play_count:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[1]+":"+_vm.verData.combine_seed.split(":")[2]))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[3]:''))])]),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.formatTime(_vm.verData.combine_seed.split(':')[5])+"("+_vm.verData.combine_seed.split(':')[5]+")":''))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(1),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),(_vm.isNew==1)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()])}
 var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])}]
 var verification_esExports = { render: verification_render, staticRenderFns: verification_staticRenderFns }
 /* harmony default export */ var selectortype_template_index_0_src_components_verification = (verification_esExports);
 // CONCATENATED MODULE: ./src/components/verification.vue
 function verification_injectStyle (ssrContext) {
-  __webpack_require__("XAgT")
+  __webpack_require__("3pi9")
 }
 var verification_normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -39007,7 +39027,7 @@ var verification___vue_template_functional__ = false
 /* styles */
 var verification___vue_styles__ = verification_injectStyle
 /* scopeId */
-var verification___vue_scopeId__ = "data-v-5e4fcf22"
+var verification___vue_scopeId__ = "data-v-31f427f4"
 /* moduleIdentifier (server only) */
 var verification___vue_module_identifier__ = null
 var verification_Component = verification_normalizeComponent(
@@ -45322,20 +45342,6 @@ module.exports = function (bitmap, value) {
   };
 };
 
-
-/***/ }),
-
-/***/ "XAgT":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("JpsG");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("rjj0")("35d71073", content, true, {});
 
 /***/ }),
 
@@ -106718,4 +106724,4 @@ module.exports = Sha256
 /***/ })
 
 },["NHnr"]);
-//# sourceMappingURL=app.87f63c9075b028d67bb9.js.map
+//# sourceMappingURL=app.8cb27dbd883be6888a35.js.map
