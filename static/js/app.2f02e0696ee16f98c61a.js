@@ -27814,6 +27814,20 @@ module.exports = __webpack_require__("FeBl").Symbol;
 
 /***/ }),
 
+/***/ "By8U":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("f2X6");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("rjj0")("051d4451", content, true, {});
+
+/***/ }),
+
 /***/ "C015":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -38643,6 +38657,51 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38691,14 +38750,19 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
       lastSixNum: '',
       luckNum: '',
       timeZone: '',
-      isNew: false
+      isNew: false,
+      seed: '',
+      signature: '',
+      pkey: '',
+      Bufresult: '',
+      BufresultBox: false
     };
   },
   created: function created() {
     this.timeZone = new Date().getTimezoneOffset() / 60;
     if (this.$route.query && this.$route.query.data) {
       this.verData = JSON.parse(this.$route.query.data);
-      //console.log(this.verData)
+      console.log(this.verData);
       var reg = /:/g;
       var arr = this.verData.combine_seed.match(reg);
 
@@ -38756,6 +38820,12 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
       }
       this.result = eosjs_ecc_lib_default.a.verify(this.verData.sig, this.verData.combine_seed, this.verData.publicKey);
     },
+    Bufverify: function Bufverify() {
+      if (this.signature && this.seed && this.pkey) {
+        this.BufresultBox = true;
+        this.Bufresult = eosjs_ecc_lib_default.a.verify(this.signature, this.seed, this.pkey);
+      }
+    },
     formatTime: function formatTime(unixTimestamp) {
       unixTimestamp = new Date(unixTimestamp * 1000);
       var commonTime = unixTimestamp.toLocaleString();
@@ -38767,6 +38837,51 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
   }
 });
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vux-loader/src/script-loader.js!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/verification.vue
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38903,14 +39018,19 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
       lastSixNum: '',
       luckNum: '',
       timeZone: '',
-      isNew: false
+      isNew: false,
+      seed: '',
+      signature: '',
+      pkey: '',
+      Bufresult: '',
+      BufresultBox: false
     };
   },
   created: function created() {
     this.timeZone = new Date().getTimezoneOffset() / 60;
     if (this.$route.query && this.$route.query.data) {
       this.verData = JSON.parse(this.$route.query.data);
-      //console.log(this.verData)
+      console.log(this.verData);
       var reg = /:/g;
       var arr = this.verData.combine_seed.match(reg);
 
@@ -38968,6 +39088,12 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
       }
       this.result = eosjs_ecc_lib_default.a.verify(this.verData.sig, this.verData.combine_seed, this.verData.publicKey);
     },
+    Bufverify: function Bufverify() {
+      if (this.signature && this.seed && this.pkey) {
+        this.BufresultBox = true;
+        this.Bufresult = eosjs_ecc_lib_default.a.verify(this.signature, this.seed, this.pkey);
+      }
+    },
     formatTime: function formatTime(unixTimestamp) {
       unixTimestamp = new Date(unixTimestamp * 1000);
       var commonTime = unixTimestamp.toLocaleString();
@@ -38978,14 +39104,14 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-4c73b572","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
-var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[_vm._m(0),_vm._v(" "),(_vm.verData)?_c('div',{staticClass:"content"},[(!_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("user_name:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[0]))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("play_count:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[1]+":"+_vm.verData.combine_seed.split(":")[2]))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[4]:''))])]),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.formatTime(_vm.verData.combine_seed.split(':')[5])+"("+_vm.verData.combine_seed.split(':')[5]+")":''))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(1),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),(_vm.isNew==1)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()])}
-var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])}]
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-26079be4","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
+var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[(_vm.verData.gameId)?_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax Bullfighting - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax Bullfighting\n\t  \t\t")])]):_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])]),_vm._v(" "),(_vm.verData.gameId)?_c('div',[_c('div',{staticClass:"content buff"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("随机种子（seed）:")]),_vm._v(" "),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.seed),expression:"seed"}],attrs:{"type":"text"},domProps:{"value":(_vm.seed)},on:{"input":function($event){if($event.target.composing){ return; }_vm.seed=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("种子签名（Signature）:")]),_vm._v(" "),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.signature),expression:"signature"}],attrs:{"type":"text"},domProps:{"value":(_vm.signature)},on:{"input":function($event){if($event.target.composing){ return; }_vm.signature=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("签名公钥（Public Key）:")]),_vm._v(" "),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.pkey),expression:"pkey"}],attrs:{"type":"text"},domProps:{"value":(_vm.pkey)},on:{"input":function($event){if($event.target.composing){ return; }_vm.pkey=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.Bufverify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.BufresultBox)?_c('div',{staticClass:"buffresult"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("验证结果(result):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.Bufresult+""))])])]):_vm._e()])]):_c('div',[(_vm.verData)?_c('div',{staticClass:"content"},[(!_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("user_name:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[0]))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("play_count:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[1]+":"+_vm.verData.combine_seed.split(":")[2]))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[4]:''))])]),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.formatTime(_vm.verData.combine_seed.split(':')[5])+"("+_vm.verData.combine_seed.split(':')[5]+")":''))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(0),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),(_vm.isNew==1)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()])])}
+var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])}]
 var verification_esExports = { render: verification_render, staticRenderFns: verification_staticRenderFns }
 /* harmony default export */ var selectortype_template_index_0_src_components_verification = (verification_esExports);
 // CONCATENATED MODULE: ./src/components/verification.vue
 function verification_injectStyle (ssrContext) {
-  __webpack_require__("cQYF")
+  __webpack_require__("By8U")
 }
 var verification_normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -38998,7 +39124,7 @@ var verification___vue_template_functional__ = false
 /* styles */
 var verification___vue_styles__ = verification_injectStyle
 /* scopeId */
-var verification___vue_scopeId__ = "data-v-4c73b572"
+var verification___vue_scopeId__ = "data-v-26079be4"
 /* moduleIdentifier (server only) */
 var verification___vue_module_identifier__ = null
 var verification_Component = verification_normalizeComponent(
@@ -47391,20 +47517,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "cQYF":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("nBYR");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("rjj0")("76c42687", content, true, {});
-
-/***/ }),
-
 /***/ "cSWu":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51116,6 +51228,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     return Long;
 });
+
+
+/***/ }),
+
+/***/ "f2X6":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("FZ+f")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".verification[data-v-26079be4]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-26079be4]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-26079be4]{font-size:20px;color:#666}.verification .content[data-v-26079be4]{padding:30px 0;font-size:24px}.verification .content .line[data-v-26079be4]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-26079be4]{display:inline-block;width:18%}.verification .content .line span[data-v-26079be4]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-26079be4]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-26079be4]{width:.6rem}.verification .content .btn[data-v-26079be4]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}.verification .content.buff .line[data-v-26079be4]{border:none}.verification .content.buff .line label[data-v-26079be4]{width:100%}.verification .content.buff input[type=text][data-v-26079be4]{width:80%;height:40px;padding-left:10px;line-height:40px;border-radius:8px;border:1px solid #dbdbdb}.verification .content .buffresult .line[data-v-26079be4]{border-bottom:1px solid #dbdbdb}.verification .content .buffresult .line label[data-v-26079be4]{width:20%!important}.verification .content .buffresult .line span[data-v-26079be4]{width:68%!important}", ""]);
+
+// exports
 
 
 /***/ }),
@@ -65921,21 +66048,6 @@ var minSigned = function minSigned(bits) {
   return new BN(1).ishln(bits - 1).ineg();
 };
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("EuP9").Buffer))
-
-/***/ }),
-
-/***/ "nBYR":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("FZ+f")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".verification[data-v-4c73b572]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-4c73b572]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-4c73b572]{font-size:20px;color:#666}.verification .content[data-v-4c73b572]{padding:30px 0;font-size:24px}.verification .content .line[data-v-4c73b572]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-4c73b572]{display:inline-block;width:18%}.verification .content .line span[data-v-4c73b572]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-4c73b572]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-4c73b572]{width:.6rem}.verification .content .btn[data-v-4c73b572]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}", ""]);
-
-// exports
-
 
 /***/ }),
 
@@ -106724,4 +106836,4 @@ module.exports = Sha256
 /***/ })
 
 },["NHnr"]);
-//# sourceMappingURL=app.a6135eb1385d1e4d4806.js.map
+//# sourceMappingURL=app.2f02e0696ee16f98c61a.js.map
