@@ -27764,6 +27764,21 @@ module.exports = { "default": __webpack_require__("fxRn"), __esModule: true };
 
 /***/ }),
 
+/***/ "BU8e":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("FZ+f")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".verification[data-v-c5a40364]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-c5a40364]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-c5a40364]{font-size:20px;color:#666}.verification .content[data-v-c5a40364]{padding:30px 0;font-size:24px}.verification .content .line[data-v-c5a40364]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-c5a40364]{display:inline-block;width:18%}.verification .content .line span[data-v-c5a40364]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-c5a40364]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-c5a40364]{width:.6rem}.verification .content .btn[data-v-c5a40364]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}.verification .content.buff .line[data-v-c5a40364]{width:100%;border:none}.verification .content.buff .line label[data-v-c5a40364]{width:100%}.verification .content.buff input[type=text][data-v-c5a40364]{width:80%;padding-left:10px}.verification .content.buff input[type=text][data-v-c5a40364],.verification .content .buffresult .line .conbox[data-v-c5a40364]{height:40px;line-height:40px;border-radius:8px;border:1px solid #dbdbdb}.verification .content .buffresult .line .conbox .cardtype[data-v-c5a40364]{padding-left:10px;width:70px;line-height:40px;font-size:24px}.verification .content .buffresult .line .conbox .cardtype img[data-v-c5a40364]{margin-right:4px;width:30px;vertical-align:sub}.verification .rules .title[data-v-c5a40364]{font-size:24px;font-weight:700}.verification .rules .content[data-v-c5a40364]{margin:0;padding:0;padding-left:10px}.verification .rules .content p[data-v-c5a40364]{font-size:18px;line-height:40px}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "BVsN":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27811,20 +27826,6 @@ __webpack_require__("OYls");
 __webpack_require__("QWe/");
 module.exports = __webpack_require__("FeBl").Symbol;
 
-
-/***/ }),
-
-/***/ "By8U":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("f2X6");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("rjj0")("051d4451", content, true, {});
 
 /***/ }),
 
@@ -34056,6 +34057,20 @@ module.exports = function (object, names) {
 
 /***/ }),
 
+/***/ "IiGJ":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("BU8e");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("rjj0")("864f1898", content, true, {});
+
+/***/ }),
+
 /***/ "J+xX":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -38702,6 +38717,61 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38712,129 +38782,368 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
 
 
 
+
+var card = 1;
+var cardArr = [],
+    cardArr1 = [];
+cardArr = initValue();
+cardArr1 = initValue();
+function initValue() {
+	var card = 1;
+	var cardArr = [];
+	for (var i = 1; i <= 52; i++) {
+		var num = void 0;
+		if (i % 13) {
+			if (i <= 13) {
+				num = '0' + card.toString(16);
+			}
+			if (i > 13 && i <= 26) {
+				num = '1' + card.toString(16);
+			}
+			if (i > 26 && i <= 39) {
+				num = '2' + card.toString(16);
+			}
+			if (i > 39 && i <= 52) {
+				num = '3' + card.toString(16);
+			}
+		} else {
+			var num1 = 13;
+			if (i <= 13) {
+				num = '0' + num1.toString(16);
+			}
+			if (i > 13 && i <= 26) {
+				num = '1' + num1.toString(16);
+			}
+			if (i > 26 && i <= 39) {
+				num = '2' + num1.toString(16);
+			}
+			if (i > 39 && i <= 52) {
+				num = '3' + num1.toString(16);
+			}
+			card = 0;
+		}
+		card++;
+		cardArr.push(num);
+	}
+	return cardArr;
+}
+
+for (var i = 1; i <= 52; i++) {
+	var verification_num = void 0;
+	if (i % 13) {
+		if (i <= 13) {
+			verification_num = '0' + card.toString(16);
+		}
+		if (i > 13 && i <= 26) {
+			verification_num = '1' + card.toString(16);
+		}
+		if (i > 26 && i <= 39) {
+			verification_num = '2' + card.toString(16);
+		}
+		if (i > 39 && i <= 52) {
+			verification_num = '3' + card.toString(16);
+		}
+	} else {
+		var num1 = 13;
+		if (i <= 13) {
+			verification_num = '0' + num1.toString(16);
+		}
+		if (i > 13 && i <= 26) {
+			verification_num = '1' + num1.toString(16);
+		}
+		if (i > 26 && i <= 39) {
+			verification_num = '2' + num1.toString(16);
+		}
+		if (i > 39 && i <= 52) {
+			verification_num = '3' + num1.toString(16);
+		}
+		card = 0;
+	}
+	card++;
+	cardArr.push(verification_num);
+}
 
 /* harmony default export */ var verification = ({
-  name: 'verification',
-  data: function data() {
-    return {
-      verData: {},
-      result: false,
-      fruit: {
-        1: pic_seven_default.a,
-        2: pic_apple_default.a,
-        3: pic_orange_default.a,
-        4: pic_bar_default.a,
-        5: pic_mongo_default.a,
-        6: pic_orange_default.a,
-        7: pic_apple_default.a,
-        8: pic_star_default.a,
-        9: pic_apple_default.a,
-        10: pic_mongo_default.a,
-        11: pic_watermelon_default.a,
-        12: pic_apple_default.a,
-        13: pic_seven_default.a,
-        14: pic_apple_default.a,
-        15: pic_orange_default.a,
-        16: pic_watermelon_default.a,
-        17: pic_mongo_default.a,
-        18: pic_orange_default.a,
-        19: pic_apple_default.a,
-        20: pic_star_default.a,
-        21: pic_apple_default.a,
-        22: pic_mongo_default.a,
-        23: pic_watermelon_default.a,
-        24: pic_orange_default.a
-      },
-      publicKey: "",
-      sha256: '',
-      lastSixNum: '',
-      luckNum: '',
-      timeZone: '',
-      isNew: false,
-      seed: '',
-      signature: '',
-      pkey: '',
-      Bufresult: '',
-      BufresultBox: false
-    };
-  },
-  created: function created() {
-    this.timeZone = new Date().getTimezoneOffset() / 60;
-    if (this.$route.query && this.$route.query.data) {
-      this.verData = JSON.parse(this.$route.query.data);
-      console.log(this.verData);
-      var reg = /:/g;
-      var arr = this.verData.combine_seed.match(reg);
+	name: 'verification',
+	data: function data() {
+		return {
+			verData: {},
+			result: false,
+			bufDate: [[], [], [], [], []],
+			fruit: {
+				1: pic_seven_default.a,
+				2: pic_apple_default.a,
+				3: pic_orange_default.a,
+				4: pic_bar_default.a,
+				5: pic_mongo_default.a,
+				6: pic_orange_default.a,
+				7: pic_apple_default.a,
+				8: pic_star_default.a,
+				9: pic_apple_default.a,
+				10: pic_mongo_default.a,
+				11: pic_watermelon_default.a,
+				12: pic_apple_default.a,
+				13: pic_seven_default.a,
+				14: pic_apple_default.a,
+				15: pic_orange_default.a,
+				16: pic_watermelon_default.a,
+				17: pic_mongo_default.a,
+				18: pic_orange_default.a,
+				19: pic_apple_default.a,
+				20: pic_star_default.a,
+				21: pic_apple_default.a,
+				22: pic_mongo_default.a,
+				23: pic_watermelon_default.a,
+				24: pic_orange_default.a
+			},
+			publicKey: "",
+			sha256: '',
+			lastSixNum: '',
+			luckNum: '',
+			timeZone: '',
+			isNew: false,
+			seed: '',
+			signature: '',
+			pkey: '',
+			Bufresult: '',
+			BufresultBox: false,
+			randromArr: []
+		};
+	},
+	created: function created() {
+		this.timeZone = new Date().getTimezoneOffset() / 60;
 
-      if (arr.length == 4) {
-        this.isNew = 1;
-      } else if (arr.length == 5) {
-        this.isNew = 2;
-      } else {
-        this.isNew = 0;
-      }
-    }
-  },
+		if (this.$route.query && this.$route.query.data) {
+			this.verData = JSON.parse(this.$route.query.data);
+			for (var item in this.verData) {
+				var obj = {
+					name: item,
+					value: this.verData[item]
+				};
+				if (item.indexOf('0') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "庄家随机种子(Banker Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "庄家签名种子(Banker Signature)";
+					} else {
+						obj["name"] = "庄家牌型(Card type Banker)";
+					}
+					this.bufDate[0].push(obj);
+				}
+				if (item.indexOf('1') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲一随机种子(Player 1 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲一签名种子(Player 1 Signature)";
+					} else {
+						obj["name"] = "闲一牌型(Card type Player 1)";
+					}
+					this.bufDate[1].push(obj);
+				}
+				if (item.indexOf('2') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲二随机种子(Player 2 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲二签名种子(Player 2 Signature)";
+					} else {
+						obj["name"] = "闲二牌型(Card type Player 2)";
+					}
+					this.bufDate[2].push(obj);
+				}
+				if (item.indexOf('3') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲三随机种子(Player 3 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲三签名种子(Player 3 Signature)";
+					} else {
+						obj["name"] = "闲三牌型(Card type Player 3)";
+					}
+					this.bufDate[3].push(obj);
+				}
+				if (item.indexOf('4') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲四随机种子(Player 4 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲四签名种子(Player 4 Signature)";
+					} else {
+						obj["name"] = "闲四牌型(Card type Player 4)";
+					}
+					this.bufDate[4].push(obj);
+				}
+			}
 
-  methods: {
-    formatDate: function formatDate(t) {
-      var that = this;
-      t = t.replace(/T/g, " ");
+			if (!this.verData.card0) {
+				var reg = /:/g;
+				var arr = this.verData.combine_seed.match(reg);
 
-      var u = navigator.userAgent,
-          app = navigator.appVersion;
-      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
-      var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-      if (isAndroid) {
-        t = t;
-      }
-      if (isIOS) {
-        t = t.replace(/\-/g, "/");
-      }
+				if (arr.length == 4) {
+					this.isNew = 1;
+				} else if (arr.length == 5) {
+					this.isNew = 2;
+				} else {
+					this.isNew = 0;
+				}
+			}
+		}
+	},
 
-      var LocalStampTime = new Date(t).getTime() - that.timeZone * 60 * 60 * 1000;
+	filters: {
+		cardType: function cardType(item) {
+			var that = this;
+			var num = cardArr[item];
+			var type = num.split('')[0];
+			cardArr.splice(item, 1);
+			switch (type) {
+				case "0":
+					return '../../../../static/images/piece.png';
+				case "1":
+					return '../../../../static/images/blossom.png';
+				case "2":
+					return '../../../../static/images/redPeach.png';
+				case "3":
+					return '../../../../static/images/Spades.png';
+				default:
+					return '';
+			}
+		},
+		cardVal: function cardVal(item) {
+			var num = cardArr1[item];
+			var type = num.split('')[1];
+			cardArr1.splice(item, 1);
+			switch (type) {
+				case "a":
+					return '10';
+				case "b":
+					return 'J';
+				case "c":
+					return 'Q';
+				case "d":
+					return 'K';
+				default:
+					return type;
+			}
+		},
+		nameStr: function nameStr(val) {
+			var num = val - 0;
+			switch (num) {
+				case 0:
+					return "庄家随机数(Random number of Banker)";
+				case 1:
+					return "闲一随机数(Random number of Banker)";
+				case 2:
+					return "闲二随机数(Random number of Banker)";
+				case 3:
+					return "闲三随机数(Random number of Banker)";
+				case 4:
+					return "闲三随机数(Random number of Banker)";
+					defaults: return "";
+			}
+		},
+		cardStr: function cardStr(val) {
+			var num = val - 0;
+			switch (num) {
+				case 0:
+					return "庄家牌型(Random number of Banker)";
+				case 1:
+					return "闲一牌型(Random number of Banker)";
+				case 2:
+					return "闲二牌型(Random number of Banker)";
+				case 3:
+					return "闲三牌型(Random number of Banker)";
+				case 4:
+					return "闲三牌型(Random number of Banker)";
+					defaults: return "";
+			}
+		}
+	},
+	methods: {
+		formatDate: function formatDate(t) {
+			var that = this;
+			t = t.replace(/T/g, " ");
 
-      var YY = new Date(LocalStampTime).getFullYear();
-      var MM = new Date(LocalStampTime).getMonth() + 1;
-      var DD = new Date(LocalStampTime).getDate();
-      var hh = new Date(LocalStampTime).getHours();
-      var mm = new Date(LocalStampTime).getMinutes();
-      var ss = new Date(LocalStampTime).getSeconds();
+			var u = navigator.userAgent,
+			    app = navigator.appVersion;
+			var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+			var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+			if (isAndroid) {
+				t = t;
+			}
+			if (isIOS) {
+				t = t.replace(/\-/g, "/");
+			}
 
-      MM = MM < 10 ? "0" + MM : MM;
-      DD = DD < 10 ? "0" + DD : DD;
-      hh = hh < 10 ? "0" + hh : hh;
-      mm = mm < 10 ? "0" + mm : mm;
-      ss = ss < 10 ? "0" + ss : ss;
+			var LocalStampTime = new Date(t).getTime() - that.timeZone * 60 * 60 * 1000;
 
-      return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
-    },
-    verify: function verify() {
-      var that = this;
-      this.sha256 = eosjs_ecc_lib_default.a.sha256(this.verData.sig);
-      this.lastSixNum = this.sha256.substr(this.sha256.length - 6, 6);
-      if (this.verData.lucky_fruit) {
-        this.luckNum = parseInt(this.lastSixNum, 16) % 24 + 1;
-      } else {
-        this.luckNum = parseInt(this.lastSixNum, 16) % 100 + 1;
-      }
-      this.result = eosjs_ecc_lib_default.a.verify(this.verData.sig, this.verData.combine_seed, this.verData.publicKey);
-    },
-    Bufverify: function Bufverify() {
-      if (this.signature && this.seed && this.pkey) {
-        this.BufresultBox = true;
-        this.Bufresult = eosjs_ecc_lib_default.a.verify(this.signature, this.seed, this.pkey);
-      }
-    },
-    formatTime: function formatTime(unixTimestamp) {
-      unixTimestamp = new Date(unixTimestamp * 1000);
-      var commonTime = unixTimestamp.toLocaleString();
-      if (commonTime.indexOf("上午", "") > -1) {
-        return commonTime.replace("上午", '');
-      }
-      return commonTime.replace("下午", '');
-    }
-  }
+			var YY = new Date(LocalStampTime).getFullYear();
+			var MM = new Date(LocalStampTime).getMonth() + 1;
+			var DD = new Date(LocalStampTime).getDate();
+			var hh = new Date(LocalStampTime).getHours();
+			var mm = new Date(LocalStampTime).getMinutes();
+			var ss = new Date(LocalStampTime).getSeconds();
+
+			MM = MM < 10 ? "0" + MM : MM;
+			DD = DD < 10 ? "0" + DD : DD;
+			hh = hh < 10 ? "0" + hh : hh;
+			mm = mm < 10 ? "0" + mm : mm;
+			ss = ss < 10 ? "0" + ss : ss;
+
+			return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
+		},
+		verify: function verify() {
+			var that = this;
+			this.sha256 = eosjs_ecc_lib_default.a.sha256(this.verData.sig);
+			this.lastSixNum = this.sha256.substr(this.sha256.length - 6, 6);
+			if (this.verData.lucky_fruit) {
+				this.luckNum = parseInt(this.lastSixNum, 16) % 24 + 1;
+			} else {
+				this.luckNum = parseInt(this.lastSixNum, 16) % 100 + 1;
+			}
+			this.result = eosjs_ecc_lib_default.a.verify(this.verData.sig, this.verData.combine_seed, this.verData.publicKey);
+		},
+		Bufverify: function Bufverify() {
+			var that = this;
+			if (this.bufDate[0][0]) {
+				cardArr = initValue();
+				cardArr1 = initValue();
+				var _num = 52;
+				that.randromArr = [];
+				this.bufDate.forEach(function (n) {
+					//item.indexOf('sign')>-1
+					if (n[2]["name"].indexOf("Signature") > -1) {
+						var number = that.getRandom(n[2]["value"], _num);
+						that.randromArr.push(number);
+						_num = _num - 5;
+					}
+				});
+			}
+			this.BufresultBox = true;
+			//		 if(this.verData){
+			//	  		  this.BufresultBox=true;
+			//		  	  this.Bufresult=ecc.verify(this.signature,this.seed,this.pkey);
+			//		 }
+		},
+		getRandom: function getRandom(sign, num) {
+			var obj = [];
+			var number = num - 0;
+			var that = this;
+			this.sha256 = eosjs_ecc_lib_default.a.sha256(sign);
+			for (var _i = 0; _i < 5; _i++) {
+				var lastSix = that.sha256.substr(that.sha256.length - 6 * (_i + 1), 6);
+				var _num2 = parseInt(lastSix, 16) % number;
+				obj.push(_num2);
+				number--;
+			}
+			return obj;
+		},
+		formatTime: function formatTime(unixTimestamp) {
+			unixTimestamp = new Date(unixTimestamp * 1000);
+			var commonTime = unixTimestamp.toLocaleString();
+			if (commonTime.indexOf("上午", "") > -1) {
+				return commonTime.replace("上午", '');
+			}
+			return commonTime.replace("下午", '');
+		}
+	}
 });
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vux-loader/src/script-loader.js!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/verification.vue
 //
@@ -38970,6 +39279,61 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38980,138 +39344,377 @@ var pic_bar_default = /*#__PURE__*/__webpack_require__.n(pic_bar);
 
 
 
+
+var verification_card = 1;
+var verification_cardArr = [],
+    verification_cardArr1 = [];
+verification_cardArr = verification_initValue();
+verification_cardArr1 = verification_initValue();
+function verification_initValue() {
+	var card = 1;
+	var cardArr = [];
+	for (var i = 1; i <= 52; i++) {
+		var num = void 0;
+		if (i % 13) {
+			if (i <= 13) {
+				num = '0' + card.toString(16);
+			}
+			if (i > 13 && i <= 26) {
+				num = '1' + card.toString(16);
+			}
+			if (i > 26 && i <= 39) {
+				num = '2' + card.toString(16);
+			}
+			if (i > 39 && i <= 52) {
+				num = '3' + card.toString(16);
+			}
+		} else {
+			var num1 = 13;
+			if (i <= 13) {
+				num = '0' + num1.toString(16);
+			}
+			if (i > 13 && i <= 26) {
+				num = '1' + num1.toString(16);
+			}
+			if (i > 26 && i <= 39) {
+				num = '2' + num1.toString(16);
+			}
+			if (i > 39 && i <= 52) {
+				num = '3' + num1.toString(16);
+			}
+			card = 0;
+		}
+		card++;
+		cardArr.push(num);
+	}
+	return cardArr;
+}
+
+for (var verification_i = 1; verification_i <= 52; verification_i++) {
+	var components_verification_num = void 0;
+	if (verification_i % 13) {
+		if (verification_i <= 13) {
+			components_verification_num = '0' + verification_card.toString(16);
+		}
+		if (verification_i > 13 && verification_i <= 26) {
+			components_verification_num = '1' + verification_card.toString(16);
+		}
+		if (verification_i > 26 && verification_i <= 39) {
+			components_verification_num = '2' + verification_card.toString(16);
+		}
+		if (verification_i > 39 && verification_i <= 52) {
+			components_verification_num = '3' + verification_card.toString(16);
+		}
+	} else {
+		var verification_num1 = 13;
+		if (verification_i <= 13) {
+			components_verification_num = '0' + verification_num1.toString(16);
+		}
+		if (verification_i > 13 && verification_i <= 26) {
+			components_verification_num = '1' + verification_num1.toString(16);
+		}
+		if (verification_i > 26 && verification_i <= 39) {
+			components_verification_num = '2' + verification_num1.toString(16);
+		}
+		if (verification_i > 39 && verification_i <= 52) {
+			components_verification_num = '3' + verification_num1.toString(16);
+		}
+		verification_card = 0;
+	}
+	verification_card++;
+	verification_cardArr.push(components_verification_num);
+}
 
 /* harmony default export */ var components_verification = ({
-  name: 'verification',
-  data: function data() {
-    return {
-      verData: {},
-      result: false,
-      fruit: {
-        1: pic_seven_default.a,
-        2: pic_apple_default.a,
-        3: pic_orange_default.a,
-        4: pic_bar_default.a,
-        5: pic_mongo_default.a,
-        6: pic_orange_default.a,
-        7: pic_apple_default.a,
-        8: pic_star_default.a,
-        9: pic_apple_default.a,
-        10: pic_mongo_default.a,
-        11: pic_watermelon_default.a,
-        12: pic_apple_default.a,
-        13: pic_seven_default.a,
-        14: pic_apple_default.a,
-        15: pic_orange_default.a,
-        16: pic_watermelon_default.a,
-        17: pic_mongo_default.a,
-        18: pic_orange_default.a,
-        19: pic_apple_default.a,
-        20: pic_star_default.a,
-        21: pic_apple_default.a,
-        22: pic_mongo_default.a,
-        23: pic_watermelon_default.a,
-        24: pic_orange_default.a
-      },
-      publicKey: "",
-      sha256: '',
-      lastSixNum: '',
-      luckNum: '',
-      timeZone: '',
-      isNew: false,
-      seed: '',
-      signature: '',
-      pkey: '',
-      Bufresult: '',
-      BufresultBox: false
-    };
-  },
-  created: function created() {
-    this.timeZone = new Date().getTimezoneOffset() / 60;
-    if (this.$route.query && this.$route.query.data) {
-      this.verData = JSON.parse(this.$route.query.data);
-      console.log(this.verData);
-      var reg = /:/g;
-      var arr = this.verData.combine_seed.match(reg);
+	name: 'verification',
+	data: function data() {
+		return {
+			verData: {},
+			result: false,
+			bufDate: [[], [], [], [], []],
+			fruit: {
+				1: pic_seven_default.a,
+				2: pic_apple_default.a,
+				3: pic_orange_default.a,
+				4: pic_bar_default.a,
+				5: pic_mongo_default.a,
+				6: pic_orange_default.a,
+				7: pic_apple_default.a,
+				8: pic_star_default.a,
+				9: pic_apple_default.a,
+				10: pic_mongo_default.a,
+				11: pic_watermelon_default.a,
+				12: pic_apple_default.a,
+				13: pic_seven_default.a,
+				14: pic_apple_default.a,
+				15: pic_orange_default.a,
+				16: pic_watermelon_default.a,
+				17: pic_mongo_default.a,
+				18: pic_orange_default.a,
+				19: pic_apple_default.a,
+				20: pic_star_default.a,
+				21: pic_apple_default.a,
+				22: pic_mongo_default.a,
+				23: pic_watermelon_default.a,
+				24: pic_orange_default.a
+			},
+			publicKey: "",
+			sha256: '',
+			lastSixNum: '',
+			luckNum: '',
+			timeZone: '',
+			isNew: false,
+			seed: '',
+			signature: '',
+			pkey: '',
+			Bufresult: '',
+			BufresultBox: false,
+			randromArr: []
+		};
+	},
+	created: function created() {
+		this.timeZone = new Date().getTimezoneOffset() / 60;
 
-      if (arr.length == 4) {
-        this.isNew = 1;
-      } else if (arr.length == 5) {
-        this.isNew = 2;
-      } else {
-        this.isNew = 0;
-      }
-    }
-  },
+		if (this.$route.query && this.$route.query.data) {
+			this.verData = JSON.parse(this.$route.query.data);
+			for (var item in this.verData) {
+				var obj = {
+					name: item,
+					value: this.verData[item]
+				};
+				if (item.indexOf('0') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "庄家随机种子(Banker Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "庄家签名种子(Banker Signature)";
+					} else {
+						obj["name"] = "庄家牌型(Card type Banker)";
+					}
+					this.bufDate[0].push(obj);
+				}
+				if (item.indexOf('1') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲一随机种子(Player 1 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲一签名种子(Player 1 Signature)";
+					} else {
+						obj["name"] = "闲一牌型(Card type Player 1)";
+					}
+					this.bufDate[1].push(obj);
+				}
+				if (item.indexOf('2') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲二随机种子(Player 2 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲二签名种子(Player 2 Signature)";
+					} else {
+						obj["name"] = "闲二牌型(Card type Player 2)";
+					}
+					this.bufDate[2].push(obj);
+				}
+				if (item.indexOf('3') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲三随机种子(Player 3 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲三签名种子(Player 3 Signature)";
+					} else {
+						obj["name"] = "闲三牌型(Card type Player 3)";
+					}
+					this.bufDate[3].push(obj);
+				}
+				if (item.indexOf('4') > -1) {
+					if (item.indexOf('Seed') > -1) {
+						obj["name"] = "闲四随机种子(Player 4 Seed)";
+					} else if (item.indexOf('sign') > -1) {
+						obj["name"] = "闲四签名种子(Player 4 Signature)";
+					} else {
+						obj["name"] = "闲四牌型(Card type Player 4)";
+					}
+					this.bufDate[4].push(obj);
+				}
+			}
 
-  methods: {
-    formatDate: function formatDate(t) {
-      var that = this;
-      t = t.replace(/T/g, " ");
+			if (!this.verData.card0) {
+				var reg = /:/g;
+				var arr = this.verData.combine_seed.match(reg);
 
-      var u = navigator.userAgent,
-          app = navigator.appVersion;
-      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
-      var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-      if (isAndroid) {
-        t = t;
-      }
-      if (isIOS) {
-        t = t.replace(/\-/g, "/");
-      }
+				if (arr.length == 4) {
+					this.isNew = 1;
+				} else if (arr.length == 5) {
+					this.isNew = 2;
+				} else {
+					this.isNew = 0;
+				}
+			}
+		}
+	},
 
-      var LocalStampTime = new Date(t).getTime() - that.timeZone * 60 * 60 * 1000;
+	filters: {
+		cardType: function cardType(item) {
+			var that = this;
+			var num = verification_cardArr[item];
+			var type = num.split('')[0];
+			verification_cardArr.splice(item, 1);
+			switch (type) {
+				case "0":
+					return '../../../../static/images/piece.png';
+				case "1":
+					return '../../../../static/images/blossom.png';
+				case "2":
+					return '../../../../static/images/redPeach.png';
+				case "3":
+					return '../../../../static/images/Spades.png';
+				default:
+					return '';
+			}
+		},
+		cardVal: function cardVal(item) {
+			var num = verification_cardArr1[item];
+			var type = num.split('')[1];
+			verification_cardArr1.splice(item, 1);
+			switch (type) {
+				case "a":
+					return '10';
+				case "b":
+					return 'J';
+				case "c":
+					return 'Q';
+				case "d":
+					return 'K';
+				default:
+					return type;
+			}
+		},
+		nameStr: function nameStr(val) {
+			var num = val - 0;
+			switch (num) {
+				case 0:
+					return "庄家随机数(Random number of Banker)";
+				case 1:
+					return "闲一随机数(Random number of Banker)";
+				case 2:
+					return "闲二随机数(Random number of Banker)";
+				case 3:
+					return "闲三随机数(Random number of Banker)";
+				case 4:
+					return "闲三随机数(Random number of Banker)";
+					defaults: return "";
+			}
+		},
+		cardStr: function cardStr(val) {
+			var num = val - 0;
+			switch (num) {
+				case 0:
+					return "庄家牌型(Random number of Banker)";
+				case 1:
+					return "闲一牌型(Random number of Banker)";
+				case 2:
+					return "闲二牌型(Random number of Banker)";
+				case 3:
+					return "闲三牌型(Random number of Banker)";
+				case 4:
+					return "闲三牌型(Random number of Banker)";
+					defaults: return "";
+			}
+		}
+	},
+	methods: {
+		formatDate: function formatDate(t) {
+			var that = this;
+			t = t.replace(/T/g, " ");
 
-      var YY = new Date(LocalStampTime).getFullYear();
-      var MM = new Date(LocalStampTime).getMonth() + 1;
-      var DD = new Date(LocalStampTime).getDate();
-      var hh = new Date(LocalStampTime).getHours();
-      var mm = new Date(LocalStampTime).getMinutes();
-      var ss = new Date(LocalStampTime).getSeconds();
+			var u = navigator.userAgent,
+			    app = navigator.appVersion;
+			var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+			var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+			if (isAndroid) {
+				t = t;
+			}
+			if (isIOS) {
+				t = t.replace(/\-/g, "/");
+			}
 
-      MM = MM < 10 ? "0" + MM : MM;
-      DD = DD < 10 ? "0" + DD : DD;
-      hh = hh < 10 ? "0" + hh : hh;
-      mm = mm < 10 ? "0" + mm : mm;
-      ss = ss < 10 ? "0" + ss : ss;
+			var LocalStampTime = new Date(t).getTime() - that.timeZone * 60 * 60 * 1000;
 
-      return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
-    },
-    verify: function verify() {
-      var that = this;
-      this.sha256 = eosjs_ecc_lib_default.a.sha256(this.verData.sig);
-      this.lastSixNum = this.sha256.substr(this.sha256.length - 6, 6);
-      if (this.verData.lucky_fruit) {
-        this.luckNum = parseInt(this.lastSixNum, 16) % 24 + 1;
-      } else {
-        this.luckNum = parseInt(this.lastSixNum, 16) % 100 + 1;
-      }
-      this.result = eosjs_ecc_lib_default.a.verify(this.verData.sig, this.verData.combine_seed, this.verData.publicKey);
-    },
-    Bufverify: function Bufverify() {
-      if (this.signature && this.seed && this.pkey) {
-        this.BufresultBox = true;
-        this.Bufresult = eosjs_ecc_lib_default.a.verify(this.signature, this.seed, this.pkey);
-      }
-    },
-    formatTime: function formatTime(unixTimestamp) {
-      unixTimestamp = new Date(unixTimestamp * 1000);
-      var commonTime = unixTimestamp.toLocaleString();
-      if (commonTime.indexOf("上午", "") > -1) {
-        return commonTime.replace("上午", '');
-      }
-      return commonTime.replace("下午", '');
-    }
-  }
+			var YY = new Date(LocalStampTime).getFullYear();
+			var MM = new Date(LocalStampTime).getMonth() + 1;
+			var DD = new Date(LocalStampTime).getDate();
+			var hh = new Date(LocalStampTime).getHours();
+			var mm = new Date(LocalStampTime).getMinutes();
+			var ss = new Date(LocalStampTime).getSeconds();
+
+			MM = MM < 10 ? "0" + MM : MM;
+			DD = DD < 10 ? "0" + DD : DD;
+			hh = hh < 10 ? "0" + hh : hh;
+			mm = mm < 10 ? "0" + mm : mm;
+			ss = ss < 10 ? "0" + ss : ss;
+
+			return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
+		},
+		verify: function verify() {
+			var that = this;
+			this.sha256 = eosjs_ecc_lib_default.a.sha256(this.verData.sig);
+			this.lastSixNum = this.sha256.substr(this.sha256.length - 6, 6);
+			if (this.verData.lucky_fruit) {
+				this.luckNum = parseInt(this.lastSixNum, 16) % 24 + 1;
+			} else {
+				this.luckNum = parseInt(this.lastSixNum, 16) % 100 + 1;
+			}
+			this.result = eosjs_ecc_lib_default.a.verify(this.verData.sig, this.verData.combine_seed, this.verData.publicKey);
+		},
+		Bufverify: function Bufverify() {
+			var that = this;
+			if (this.bufDate[0][0]) {
+				verification_cardArr = verification_initValue();
+				verification_cardArr1 = verification_initValue();
+				var _num = 52;
+				that.randromArr = [];
+				this.bufDate.forEach(function (n) {
+					//item.indexOf('sign')>-1
+					if (n[2]["name"].indexOf("Signature") > -1) {
+						var number = that.getRandom(n[2]["value"], _num);
+						that.randromArr.push(number);
+						_num = _num - 5;
+					}
+				});
+			}
+			this.BufresultBox = true;
+			//		 if(this.verData){
+			//	  		  this.BufresultBox=true;
+			//		  	  this.Bufresult=ecc.verify(this.signature,this.seed,this.pkey);
+			//		 }
+		},
+		getRandom: function getRandom(sign, num) {
+			var obj = [];
+			var number = num - 0;
+			var that = this;
+			this.sha256 = eosjs_ecc_lib_default.a.sha256(sign);
+			for (var _i = 0; _i < 5; _i++) {
+				var lastSix = that.sha256.substr(that.sha256.length - 6 * (_i + 1), 6);
+				var _num2 = parseInt(lastSix, 16) % number;
+				obj.push(_num2);
+				number--;
+			}
+			return obj;
+		},
+		formatTime: function formatTime(unixTimestamp) {
+			unixTimestamp = new Date(unixTimestamp * 1000);
+			var commonTime = unixTimestamp.toLocaleString();
+			if (commonTime.indexOf("上午", "") > -1) {
+				return commonTime.replace("上午", '');
+			}
+			return commonTime.replace("下午", '');
+		}
+	}
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-26079be4","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
-var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[(_vm.verData.gameId)?_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax Bullfighting - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax Bullfighting\n\t  \t\t")])]):_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])]),_vm._v(" "),(_vm.verData.gameId)?_c('div',[_c('div',{staticClass:"content buff"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("随机种子（seed）:")]),_vm._v(" "),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.seed),expression:"seed"}],attrs:{"type":"text"},domProps:{"value":(_vm.seed)},on:{"input":function($event){if($event.target.composing){ return; }_vm.seed=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("种子签名（Signature）:")]),_vm._v(" "),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.signature),expression:"signature"}],attrs:{"type":"text"},domProps:{"value":(_vm.signature)},on:{"input":function($event){if($event.target.composing){ return; }_vm.signature=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("签名公钥（Public Key）:")]),_vm._v(" "),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.pkey),expression:"pkey"}],attrs:{"type":"text"},domProps:{"value":(_vm.pkey)},on:{"input":function($event){if($event.target.composing){ return; }_vm.pkey=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.Bufverify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.BufresultBox)?_c('div',{staticClass:"buffresult"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("验证结果(result):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.Bufresult+""))])])]):_vm._e()])]):_c('div',[(_vm.verData)?_c('div',{staticClass:"content"},[(!_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("user_name:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[0]))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("play_count:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[1]+":"+_vm.verData.combine_seed.split(":")[2]))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[4]:''))])]),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.formatTime(_vm.verData.combine_seed.split(':')[5])+"("+_vm.verData.combine_seed.split(':')[5]+")":''))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(0),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),(_vm.isNew==1)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()])])}
-var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])}]
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-c5a40364","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
+var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[(_vm.verData.card0)?_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax Bullfighting - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax Bullfighting\n\t  \t\t")])]):_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])]),_vm._v(" "),(_vm.verData.card0)?_c('div',[_c('div',{staticClass:"content buff"},[_vm._l((_vm.bufDate),function(item,index){return _c('div',{key:index,staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(item[0].name)+":")]),_vm._v(" "),_c('div',[_c('input',{attrs:{"type":"text","readonly":"readonly"},domProps:{"value":item[0].value}})])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(item[2].name)+":")]),_vm._v(" "),_c('div',[_c('input',{attrs:{"type":"text","readonly":"readonly"},domProps:{"value":item[2].value}})])])])}),_vm._v(" "),_c('div',{staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("签名公钥（Public Key）:")]),_vm._v(" "),_c('div',[_c('input',{attrs:{"type":"text","readonly":"readonly"},domProps:{"value":_vm.verData.publicKey}})])]),_vm._v(" "),_c('div',{staticClass:"line"})]),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.Bufverify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.BufresultBox)?_c('div',{staticClass:"buffresult"},[_vm._l((_vm.randromArr),function(item,ind){return _c('div',{staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(_vm._f("cardStr")(ind))+":")]),_vm._v(" "),_c('div',{staticClass:"flex conbox"},_vm._l((item),function(cardNum,indx){return _c('div',{key:indx,staticClass:"cardtype"},[_c('img',{attrs:{"src":_vm._f("cardType")(cardNum)}}),_vm._v(_vm._s(_vm._f("cardVal")(cardNum))+"\n\t  \t\t\t\t\t\t\t")])}))])])}),_vm._v(" "),_vm._l((_vm.randromArr),function(item,ind){return _c('div',{key:ind,staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(_vm._f("nameStr")(ind))+":")]),_vm._v(" "),_c('div',{staticClass:"flex conbox"},_vm._l((item),function(cardNum,indx){return _c('div',{key:indx,staticClass:"cardtype"},[_vm._v("\n\t  \t\t\t\t\t\t\t\t"+_vm._s(cardNum)+"\n\t  \t\t\t\t\t\t\t")])}))])])})],2):_vm._e()],2)]):_c('div',[(_vm.verData)?_c('div',{staticClass:"content"},[(!_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("user_name:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[0]))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("play_count:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[1]+":"+_vm.verData.combine_seed.split(":")[2]))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[4]:''))])]),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.formatTime(_vm.verData.combine_seed.split(':')[5])+"("+_vm.verData.combine_seed.split(':')[5]+")":''))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(0),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),(_vm.isNew==1)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()]),_vm._v(" "),(_vm.verData.card0)?_c('div',{staticClass:"rules"},[_c('div',{staticClass:"title"},[_vm._v("\n  \t\t\t\t【Random Number Formula】\n  \t\t\t")]),_vm._v(" "),_vm._m(1),_vm._v(" "),_c('div',{staticClass:"title"},[_vm._v("\n  \t\t\t\t【Dealing logic】\n  \t\t\t")]),_vm._v(" "),_vm._m(2)]):_vm._e()])}
+var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"content"},[_c('p',[_vm._v("result=sha256(sign(sha256(game_id+role+last_time+bet_amount)))")]),_vm._v(" "),_c('p',[_vm._v("Game_id: The ID of the game in this round is incremental in order and traceable.")]),_vm._v(" "),_c('p',[_vm._v("Role: The position on the table, banker, player one, player two, player three and player four correspond to 0, 1, 2, 3, 4 respectively.")]),_vm._v(" "),_c('p',[_vm._v("Last_time: The timestamp of the last player in this position. The time of the banker according to the bet time of the last player in this game.")]),_vm._v(" "),_c('p',[_vm._v("Bet_amount: The total bet amounts made at this location.Banker’s bet amount=The sum of four players’ bet amounts.")]),_vm._v(" "),_c('p',[_vm._v("The sign operation applies the private key corresponding to the public key reserved in smart contract to sign, and the signature can be verified by the public key.")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"content"},[_c('p',[_vm._v("contract calculates five random numbers (A, B, C, D, E) in turn, corresponding to five positions of cards (25 cards in total).")]),_vm._v(" "),_c('p',[_vm._v("Random number is 64-bit HEX number. Divide the number of remaining cards by 6 digits at a time, and the remainder (starting from 0) is chosen as the selected cards (52 cards are arranged in the order of diamonds A~K, clubsA~K, hearts A~K, spades A~K).")]),_vm._v(" "),_c('p',[_vm._v("The position of each card in the deck is calculated according to the following formula. After calculating the result, the card is removed from the deck to calculate the position of the next card.")]),_vm._v(" "),_c('p',[_vm._v("Take (The last 6 digits of A) % the number of remaining cards (52) out of the deck as the first card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 7-12 digits of A) % the number of remaining cards (51) out of the deck as the second card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 13-18 digits of A) % the number of remaining cards (50) out of the deck as the third card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 19-24 digits of A) % the number of remaining cards (49) out of the deck as the fourth card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 25-30 digits of A) % the number of remaining cards (48) out of the deck as the fifth card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("By analogy, the card type results of player one, player two, player three and player four are obtained by B, C, D and E.")])])}]
 var verification_esExports = { render: verification_render, staticRenderFns: verification_staticRenderFns }
 /* harmony default export */ var selectortype_template_index_0_src_components_verification = (verification_esExports);
 // CONCATENATED MODULE: ./src/components/verification.vue
 function verification_injectStyle (ssrContext) {
-  __webpack_require__("By8U")
+  __webpack_require__("IiGJ")
 }
 var verification_normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -39124,7 +39727,7 @@ var verification___vue_template_functional__ = false
 /* styles */
 var verification___vue_styles__ = verification_injectStyle
 /* scopeId */
-var verification___vue_scopeId__ = "data-v-26079be4"
+var verification___vue_scopeId__ = "data-v-c5a40364"
 /* moduleIdentifier (server only) */
 var verification___vue_module_identifier__ = null
 var verification_Component = verification_normalizeComponent(
@@ -51228,21 +51831,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     return Long;
 });
-
-
-/***/ }),
-
-/***/ "f2X6":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("FZ+f")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".verification[data-v-26079be4]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-26079be4]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-26079be4]{font-size:20px;color:#666}.verification .content[data-v-26079be4]{padding:30px 0;font-size:24px}.verification .content .line[data-v-26079be4]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-26079be4]{display:inline-block;width:18%}.verification .content .line span[data-v-26079be4]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-26079be4]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-26079be4]{width:.6rem}.verification .content .btn[data-v-26079be4]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}.verification .content.buff .line[data-v-26079be4]{border:none}.verification .content.buff .line label[data-v-26079be4]{width:100%}.verification .content.buff input[type=text][data-v-26079be4]{width:80%;height:40px;padding-left:10px;line-height:40px;border-radius:8px;border:1px solid #dbdbdb}.verification .content .buffresult .line[data-v-26079be4]{border-bottom:1px solid #dbdbdb}.verification .content .buffresult .line label[data-v-26079be4]{width:20%!important}.verification .content .buffresult .line span[data-v-26079be4]{width:68%!important}", ""]);
-
-// exports
 
 
 /***/ }),
@@ -106836,4 +107424,4 @@ module.exports = Sha256
 /***/ })
 
 },["NHnr"]);
-//# sourceMappingURL=app.2f02e0696ee16f98c61a.js.map
+//# sourceMappingURL=app.1628a4e6c237eac4926a.js.map
