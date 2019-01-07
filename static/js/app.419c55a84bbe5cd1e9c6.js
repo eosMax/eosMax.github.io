@@ -32427,6 +32427,20 @@ module.exports = (
 
 /***/ }),
 
+/***/ "GLjd":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("IEKM");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("rjj0")("dc2f6ae4", content, true, {});
+
+/***/ }),
+
 /***/ "GegP":
 /***/ (function(module, exports) {
 
@@ -33929,6 +33943,21 @@ var ecc = {
 };
 
 module.exports = ecc;
+
+/***/ }),
+
+/***/ "IEKM":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("FZ+f")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".verification[data-v-7e328292]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-7e328292]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-7e328292]{font-size:20px;color:#666}.verification .content[data-v-7e328292]{padding:30px 0;font-size:24px}.verification .content .line[data-v-7e328292]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-7e328292]{display:inline-block;width:18%}.verification .content .line span[data-v-7e328292]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-7e328292]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-7e328292]{width:.6rem}.verification .content .btn[data-v-7e328292]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}.verification .content.buff .line[data-v-7e328292]{width:100%;border:none}.verification .content.buff .line label[data-v-7e328292]{width:100%}.verification .content.buff input[type=text][data-v-7e328292]{width:80%;padding-left:10px}.verification .content.buff input[type=text][data-v-7e328292],.verification .content .buffresult .line .conbox[data-v-7e328292]{height:40px;line-height:40px;border-radius:8px;border:1px solid #dbdbdb}.verification .content .buffresult .line .conbox .cardtype[data-v-7e328292]{padding-left:10px;width:70px;line-height:40px;font-size:24px}.verification .content .buffresult .line .conbox .cardtype img[data-v-7e328292]{margin-right:4px;width:30px;vertical-align:sub}.verification .rules .title[data-v-7e328292]{font-size:24px;font-weight:700}.verification .rules .content[data-v-7e328292]{margin:0;padding:0;padding-left:10px}.verification .rules .content p[data-v-7e328292]{font-size:18px;line-height:40px}", ""]);
+
+// exports
+
 
 /***/ }),
 
@@ -39014,15 +39043,15 @@ for (var i = 1; i <= 52; i++) {
 			var num = val - 0;
 			switch (num) {
 				case 0:
-					return "庄家牌型(Random number of Banker)";
+					return "庄家牌型(Card type of Banker)";
 				case 1:
-					return "闲一牌型(Random number of play 1)";
+					return "闲一牌型(Card type of play 1)";
 				case 2:
-					return "闲二牌型(Random number of play 2)";
+					return "闲二牌型(Card type of play 2)";
 				case 3:
-					return "闲三牌型(Random number of play 3)";
+					return "闲三牌型(Card type of play 3)";
 				case 4:
-					return "闲四牌型(Random number of play 4)";
+					return "闲四牌型(Card type of play 4)";
 					defaults: return "";
 			}
 		}
@@ -39576,15 +39605,15 @@ for (var verification_i = 1; verification_i <= 52; verification_i++) {
 			var num = val - 0;
 			switch (num) {
 				case 0:
-					return "庄家牌型(Random number of Banker)";
+					return "庄家牌型(Card type of Banker)";
 				case 1:
-					return "闲一牌型(Random number of play 1)";
+					return "闲一牌型(Card type of play 1)";
 				case 2:
-					return "闲二牌型(Random number of play 2)";
+					return "闲二牌型(Card type of play 2)";
 				case 3:
-					return "闲三牌型(Random number of play 3)";
+					return "闲三牌型(Card type of play 3)";
 				case 4:
-					return "闲四牌型(Random number of play 4)";
+					return "闲四牌型(Card type of play 4)";
 					defaults: return "";
 			}
 		}
@@ -39678,14 +39707,14 @@ for (var verification_i = 1; verification_i <= 52; verification_i++) {
 		}
 	}
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-733f3016","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-7e328292","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vux-loader/src/before-template-compiler-loader.js!./node_modules/vux-loader/src/template-loader.js!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/verification.vue
 var verification_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"verification"},[(_vm.verData.card0)?_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax Bullfighting - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax Bullfighting\n\t  \t\t")])]):_c('div',{staticClass:"top"},[_c('div',{staticClass:"title"},[_vm._v("\n\t  \t\t\t\tEOSMax - Game Verification Script\n\t  \t\t")]),_vm._v(" "),_c('div',{staticClass:"info"},[_vm._v("\n\t  \t\t\t\tThird part script used to verify games on EOSMax \n\t  \t\t")])]),_vm._v(" "),(_vm.verData.card0)?_c('div',[_c('div',{staticClass:"content buff"},[_vm._l((_vm.bufDate),function(item,index){return _c('div',{key:index,staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(item[0].name)+":")]),_vm._v(" "),_c('div',[_c('input',{attrs:{"type":"text","readonly":"readonly"},domProps:{"value":item[0].value}})])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(item[2].name)+":")]),_vm._v(" "),_c('div',[_c('input',{attrs:{"type":"text","readonly":"readonly"},domProps:{"value":item[2].value}})])])])}),_vm._v(" "),_c('div',{staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("签名公钥（Public Key）:")]),_vm._v(" "),_c('div',[_c('input',{attrs:{"type":"text","readonly":"readonly"},domProps:{"value":_vm.verData.publicKey}})])]),_vm._v(" "),_c('div',{staticClass:"line"})]),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.Bufverify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.BufresultBox)?_c('div',{staticClass:"buffresult"},[_vm._l((_vm.randromArr),function(item,ind){return _c('div',{staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(_vm._f("cardStr")(ind))+":")]),_vm._v(" "),_c('div',{staticClass:"flex conbox"},_vm._l((item),function(cardNum,indx){return _c('div',{key:indx,staticClass:"cardtype"},[_c('img',{attrs:{"src":_vm._f("cardType")(cardNum)}}),_vm._v(_vm._s(_vm._f("cardVal")(cardNum))+"\n\t  \t\t\t\t\t\t\t")])}))])])}),_vm._v(" "),_vm._l((_vm.randromArr),function(item,ind){return _c('div',{key:ind,staticClass:"flex"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v(_vm._s(_vm._f("nameStr")(ind))+":")]),_vm._v(" "),_c('div',{staticClass:"flex conbox"},_vm._l((item),function(cardNum,indx){return _c('div',{key:indx,staticClass:"cardtype"},[_vm._v("\n\t  \t\t\t\t\t\t\t\t"+_vm._s(cardNum)+"\n\t  \t\t\t\t\t\t\t")])}))])])})],2):_vm._e()],2)]):_c('div',[(_vm.verData)?_c('div',{staticClass:"content"},[(!_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("betid:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.bet_id))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("user_name:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[0]))])]):_vm._e(),_vm._v(" "),(_vm.isNew)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("play_count:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed.split(":")[1]+":"+_vm.verData.combine_seed.split(":")[2]))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("playerSeed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[4]:''))])]),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed.split(':')[2]:''))])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("time stamp:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.formatTime(_vm.verData.combine_seed.split(':')[5])+"("+_vm.verData.combine_seed.split(':')[5]+")":''))])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("combine_seed:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.combine_seed?_vm.verData.combine_seed:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_vm._m(0),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.hash?_vm.verData.hash:''))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("public key:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.publicKey))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("sign:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.verData.sig))])]),_vm._v(" "),(_vm.isNew==1)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==0)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(betid+palyerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),(_vm.isNew==2)?_c('div',{staticClass:"line"},[_c('label',[_vm._v("formula:")]),_vm._v(" "),(_vm.verData.lucky_fruit)?_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 24)+1")]):_c('span',[_vm._v("(postfix6(sha256(sign(sha256(user_name+play_count+bet_amount+playerseed+timestamp))) Mod 100)+1")])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"btn",on:{"click":_vm.verify}},[_vm._v("\n  \t\t\t\t\t\tVerify\n  \t\t\t\t")]),_vm._v(" "),(_vm.result)?_c('div',{staticClass:"result"},[_c('div',{staticClass:"line"},[_c('label',[_vm._v("sha256(sig):")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.sha256))])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("last 6 digits:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.lastSixNum)+"("+_vm._s(parseInt(_vm.lastSixNum,16))+")")])]),_vm._v(" "),_c('div',{staticClass:"line"},[_c('label',[_vm._v("lucky number:")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.luckNum)),(_vm.verData.lucky_fruit)?_c('span',{staticClass:"fruit"},[_c('img',{attrs:{"src":_vm.fruit[_vm.luckNum]}})]):_vm._e()])])]):_vm._e()]):_vm._e()]),_vm._v(" "),(_vm.verData.card0)?_c('div',{staticClass:"rules"},[_c('div',{staticClass:"title"},[_vm._v("\n  \t\t\t\t【Random Number Formula】\n  \t\t\t")]),_vm._v(" "),_vm._m(1),_vm._v(" "),_c('div',{staticClass:"title"},[_vm._v("\n  \t\t\t\t【Dealing logic】\n  \t\t\t")]),_vm._v(" "),_vm._m(2)]):_vm._e()])}
 var verification_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',[_vm._v("combine_seed"),_c('br'),_vm._v("(hash):")])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"content"},[_c('p',[_vm._v("result=sha256(sign(sha256(game_id+role+last_time+bet_amount)))")]),_vm._v(" "),_c('p',[_vm._v("Game_id: The ID of the game in this round is incremental in order and traceable.")]),_vm._v(" "),_c('p',[_vm._v("Role: The position on the table, banker, player one, player two, player three and player four correspond to 0, 1, 2, 3, 4 respectively.")]),_vm._v(" "),_c('p',[_vm._v("Last_time: The timestamp of the last player in this position. The time of the banker according to the bet time of the last player in this game.")]),_vm._v(" "),_c('p',[_vm._v("Bet_amount: The total bet amounts made at this location.Banker’s bet amount=The sum of four players’ bet amounts.")]),_vm._v(" "),_c('p',[_vm._v("The sign operation applies the private key corresponding to the public key reserved in smart contract to sign, and the signature can be verified by the public key.")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"content"},[_c('p',[_vm._v("contract calculates five random numbers (A, B, C, D, E) in turn, corresponding to five positions of cards (25 cards in total).")]),_vm._v(" "),_c('p',[_vm._v("Random number is 64-bit HEX number. Divide the number of remaining cards by 6 digits at a time, and the remainder (starting from 0) is chosen as the selected cards (52 cards are arranged in the order of diamonds A~K, clubsA~K, hearts A~K, spades A~K).")]),_vm._v(" "),_c('p',[_vm._v("The position of each card in the deck is calculated according to the following formula. After calculating the result, the card is removed from the deck to calculate the position of the next card.")]),_vm._v(" "),_c('p',[_vm._v("Take (The last 6 digits of A) % the number of remaining cards (52) out of the deck as the first card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 7-12 digits of A) % the number of remaining cards (51) out of the deck as the second card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 13-18 digits of A) % the number of remaining cards (50) out of the deck as the third card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 19-24 digits of A) % the number of remaining cards (49) out of the deck as the fourth card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("Take (The reciprocal 25-30 digits of A) % the number of remaining cards (48) out of the deck as the fifth card position of the banker.")]),_vm._v(" "),_c('p',[_vm._v("By analogy, the card type results of player one, player two, player three and player four are obtained by B, C, D and E.")])])}]
 var verification_esExports = { render: verification_render, staticRenderFns: verification_staticRenderFns }
 /* harmony default export */ var selectortype_template_index_0_src_components_verification = (verification_esExports);
 // CONCATENATED MODULE: ./src/components/verification.vue
 function verification_injectStyle (ssrContext) {
-  __webpack_require__("cmr3")
+  __webpack_require__("GLjd")
 }
 var verification_normalizeComponent = __webpack_require__("VU/8")
 /* script */
@@ -39698,7 +39727,7 @@ var verification___vue_template_functional__ = false
 /* styles */
 var verification___vue_styles__ = verification_injectStyle
 /* scopeId */
-var verification___vue_scopeId__ = "data-v-733f3016"
+var verification___vue_scopeId__ = "data-v-7e328292"
 /* moduleIdentifier (server only) */
 var verification___vue_module_identifier__ = null
 var verification_Component = verification_normalizeComponent(
@@ -48170,20 +48199,6 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ "cmr3":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("e7B9");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("rjj0")("3b49483f", content, true, {});
-
-/***/ }),
-
 /***/ "crlp":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -50048,21 +50063,6 @@ var TAG = __webpack_require__("dSzd")('toStringTag');
 module.exports = function (it, tag, stat) {
   if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
 };
-
-
-/***/ }),
-
-/***/ "e7B9":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("FZ+f")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".verification[data-v-733f3016]{background:#fff;margin:0 auto;padding:10px;width:80%;text-align:left}.verification .top[data-v-733f3016]{font-size:30px;padding:20px 0;color:#333;border-bottom:1px solid #dbdbdb}.verification .top .info[data-v-733f3016]{font-size:20px;color:#666}.verification .content[data-v-733f3016]{padding:30px 0;font-size:24px}.verification .content .line[data-v-733f3016]{padding:10px 0 6px;border-bottom:1px solid #dbdbdb}.verification .content .line label[data-v-733f3016]{display:inline-block;width:18%}.verification .content .line span[data-v-733f3016]{display:inline-block;width:80%;vertical-align:middle;word-break:break-all}.verification .content .line .fruit[data-v-733f3016]{margin-left:10px;color:#ffb400}.verification .content .line .fruit img[data-v-733f3016]{width:.6rem}.verification .content .btn[data-v-733f3016]{margin-top:20px;font-size:30px;color:#fff;width:198px;height:44px;line-height:44px;text-align:center;background:#ff4547;border-radius:8px;cursor:pointer}.verification .content.buff .line[data-v-733f3016]{width:100%;border:none}.verification .content.buff .line label[data-v-733f3016]{width:100%}.verification .content.buff input[type=text][data-v-733f3016]{width:80%;padding-left:10px}.verification .content.buff input[type=text][data-v-733f3016],.verification .content .buffresult .line .conbox[data-v-733f3016]{height:40px;line-height:40px;border-radius:8px;border:1px solid #dbdbdb}.verification .content .buffresult .line .conbox .cardtype[data-v-733f3016]{padding-left:10px;width:70px;line-height:40px;font-size:24px}.verification .content .buffresult .line .conbox .cardtype img[data-v-733f3016]{margin-right:4px;width:30px;vertical-align:sub}.verification .rules .title[data-v-733f3016]{font-size:24px;font-weight:700}.verification .rules .content[data-v-733f3016]{margin:0;padding:0;padding-left:10px}.verification .rules .content p[data-v-733f3016]{font-size:18px;line-height:40px}", ""]);
-
-// exports
 
 
 /***/ }),
@@ -107424,4 +107424,4 @@ module.exports = Sha256
 /***/ })
 
 },["NHnr"]);
-//# sourceMappingURL=app.8a009ba3e8441e3e61e4.js.map
+//# sourceMappingURL=app.419c55a84bbe5cd1e9c6.js.map
